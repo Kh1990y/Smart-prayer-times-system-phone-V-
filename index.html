@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>مواقيت الصلاة الذكي | V30 Final Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="data.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Inter:wght@400;700;900&display=swap');
+        :root { 
+            --bg-gradient: radial-gradient(circle at center, #e5e0d5 0%, #cfc8ba 50%, #b0a99a 100%);
+            --text-brown: #453f39; 
+            --accent-gold: #a68b5b; 
+            --glass-table: rgba(255, 255, 255, 0.15); 
+            --glass-dhikr: rgba(255, 255, 255, 0.02); 
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+        html, body { height: 100vh; width: 100vw; overflow: hidden; font-family: 'Cairo', sans-serif; background: var(--bg-gradient); }
+        
+        #appContainer { width: 100vw; height: 100vh; display: flex; flex-direction: column; padding: 2vh 4vw 5vh 4vw; position: relative; transition: all 0.4s ease; }
+        
+        .header { margin-bottom: 8px; flex-shrink: 0; }
+        #mainClock { font-family: 'Inter', sans-serif; font-size: 14vh; font-weight: 900; line-height: 0.8; letter-spacing: -0.5vh; color: var(--text-brown); }
+        #secondsClock { font-family: 'Inter', sans-serif; font-size: 5vh; font-weight: 700; color: var(--accent-gold); }
+        #ampm { font-size: 3vh; font-weight: 900; color: var(--text-brown); }
+
+        .countdown-wrapper { background: rgba(75, 70, 65, 0.9); color: #fdfbf7; padding: 0.5vh 4vw; border-radius: 12px; margin-top: 5px; display: inline-block; }
+        #nextPrayerCountdown { font-size: 3vh; font-weight: 900; }
+
+        .dhikr-box { 
+            height: 9vh; background: var(--glass-dhikr); backdrop-filter: blur(4px);
+            border-radius: 25px; display: flex; align-items: center; justify-content: center; 
+            width: 100%; margin: 0 auto; border: 1px solid rgba(255, 255, 255, 0.05); 
+            position: relative; overflow: hidden; flex-shrink: 0; margin-bottom: 2vh; 
+        }
+        #dhikrText { color: #5d4d33; font-size: 5vh; font-weight: 800; text-align: center; transition: all 0.6s ease; }
+        .dhikr-fade { opacity: 0; transform: translateY(5px); }
+
+        .prayer-list-container { 
+            background: var(--glass-table); backdrop-filter: blur(20px); 
+            border-radius: 40px; flex-grow: 1; display: flex; flex-direction: column; 
+            justify-content: flex-start; padding: 0.8vh; border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+        }
+
+        .prayer-row { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 0 4vw; height: 16%; border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+            transition: all 0.5s ease; font-size: 5.2vh; font-weight: 900; color: #3d3832;
+            margin-bottom: 2px;
+        }
+        .prayer-row:last-child { border-bottom: none; margin-bottom: 0; }
+        
+        .next-active { 
+            background: linear-gradient(90deg, #fdfbf7, #f3e9d2, #fdfbf7) !important;
+            background-size: 200% auto; animation: royalShimmer 3s linear infinite;
+            border-radius: 25px; transform: scale(1.015);
+            box-shadow: 0 10px 30px rgba(166, 139, 91, 0.25);
+            border: 2px solid #ffffff !important; z-index: 20; color: #2d2924 !important;
+        }
+        @keyframes royalShimmer { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+
+        .col-name { width: 33.33%; text-align: center; }
+        .col-adhan { width: 33.33%; text-align: center; font-family: 'Inter', sans-serif; }
+        .col-iqama { width: 33.33%; text-align: center; color: var(--accent-gold); }
+        .period-mark { font-weight: 900; font-size: 0.6em; margin-right: 2px; color: inherit; }
+
+        /* نافذة الأذكار - Fullscreen Dashboard */
+        #afterPrayerOverlay { 
+            position: absolute; inset: 0; z-index: 5000;
+            background: var(--bg-gradient);
+            display: none; flex-direction: column; 
+            padding: 2vh 3vw; 
+        }
+        
+        .dhikr-main-title { 
+            font-size: 5vh; 
+            font-weight: 900; 
+            color: var(--accent-gold); 
+            text-align: center; 
+            margin-top: 35vh; 
+            margin-bottom: 1.5vh; 
+            flex-shrink: 0; 
+        }
+        
+        #dhikrDashboardGrid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.2vh;
+            width: 100%;
+            height: 100%;
+            flex-grow: 1;
+            align-content: center; 
+        }
+
+        .card-dhikr {
+            background: rgba(255, 255, 255, 0.65);
+            border: 2px solid rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 1.5vh 1.5vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.6s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+            height: 100%; 
+        }
+
+        .card-dhikr.show { opacity: 1; transform: scale(1); }
+        .dhikr-content { font-size: 2.2vh; font-weight: 800; color: var(--text-brown); line-height: 1.3; width: 100%; }
+        .dhikr-repeat { font-size: 1.8vh; font-weight: 900; color: var(--accent-gold); margin-top: 0.8vh; border-top: 2px solid rgba(166, 139, 91, 0.1); width: 100%; padding-top: 0.3vh; }
+        .card-wide { grid-column: span 3; min-height: 15vh; }
+
+        /* التوافق مع الهواتف - Portrait Mode */
+        @media (max-width: 600px) or (orientation: portrait) {
+            #mainClock { font-size: 10vh; }
+            .header h1 { font-size: 4vh; }
+            #dhikrText { font-size: 2.8vh; }
+            .prayer-row { font-size: 2.5vh; }
+            .countdown-wrapper #nextPrayerCountdown { font-size: 1.8vh; }
+            
+            #dhikrDashboardGrid { 
+                grid-template-columns: 1fr; 
+                gap: 1vh;
+                overflow-y: auto; /* للسماح بالتمرير في حال زادت الأذكار في شاشة صغيرة */
+            }
+            .card-dhikr { padding: 2vh; border-radius: 15px; }
+            .card-wide { grid-column: span 1; }
+            .dhikr-content { font-size: 1.8vh; }
+            .dhikr-main-title { font-size: 3vh; margin-top: 10vh; }
+            #afterPrayerOverlay { padding: 5vh 4vw; }
+            
+            #settingsOverlay .adj-grid { grid-template-columns: 1fr !important; }
+        }
+
+        #settingsOverlay { background: #f8f6f2; z-index: 4000; padding: 2vh 3vw; display: none; flex-direction: column; justify-content: space-between; overflow-y: auto; }
+        .overlay-window { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: 0.6s ease; z-index: 2000; background: var(--bg-gradient); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 5vh; }
+        .overlay-window.active { opacity: 1; visibility: visible; }
+    </style>
+</head>
+<body>
+
+    <div id="appContainer">
+        <div id="blackOverlay" class="overlay-window" style="background: #000; z-index: 3000;"></div>
+        <i class="fas fa-sliders-h absolute top-6 right-6 opacity-30 text-3xl cursor-pointer z-50" onclick="toggleSettings()" style="color: var(--accent-gold)"></i>
+
+        <div class="header text-center">
+            <p id="fullDate" class="text-[2.2vh] font-bold text-[#8e734b]">
+                <span id="hijriDate">اوقات</span> <span class="mx-3 opacity-40">|</span> <span id="gregorianDate">المدينة المنورة</span>
+            </p>
+            <h1 id="dayName" class="text-[5vh] font-black leading-tight">--</h1>
+            <div class="flex items-baseline justify-center">
+                <span id="mainClock">00:00</span>
+                <div class="flex items-center ml-3">
+                    <span id="secondsClock" class="text-[5vh] font-bold text-[#a68b5b]">00</span>
+                    <span id="ampm" class="ml-2 text-[3vh] font-bold text-stone-600">--</span>
+                </div>
+            </div>
+            <div class="countdown-wrapper"><div id="nextPrayerCountdown">برنامج مجاني</div></div>
+        </div>
+
+        <div class="dhikr-box"><div id="dhikrText">أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ</div></div>
+        <div class="prayer-list-container" id="prayerList"></div>
+
+        <div id="settingsOverlay" style="position: absolute; inset: 0;">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-[3.5vh] font-black text-stone-700">الإعدادات</h2>
+                <div class="flex gap-2">
+                    <button onclick="rotate(0)" class="bg-white px-4 py-1 rounded-lg text-sm font-bold shadow-sm">طبيعي</button>
+                    <button onclick="rotate(90)" class="bg-white px-4 py-1 rounded-lg text-sm font-bold shadow-sm">يمين</button>
+                    <button onclick="rotate(-90)" class="bg-white px-4 py-1 rounded-lg text-sm font-bold shadow-sm">يسار</button>
+                </div>
+            </div>
+            <div class="adj-grid" style="display: grid; grid-template-columns: repeat(3,1fr); gap: 10px;">
+                <div class="adj-card"><p class="adj-label">تعديل الأذان</p><div id="adhanAdjList"></div></div>
+                <div class="adj-card"><p class="adj-label">تعديل الإقامة</p><div id="iqamaAdjList"></div></div>
+                <div class="adj-card"><p class="adj-label">الشاشة السوداء</p><div id="blackScreenAdjList"></div></div>
+            </div>
+            <button onclick="toggleSettings()" class="w-full bg-stone-700 text-white py-3 rounded-xl font-black text-2xl mt-1">حفظ</button>
+        </div>
+
+        <div id="afterPrayerOverlay">
+            <p class="dhikr-main-title">أذكار ما بعد الصلاة المفروضة</p>
+            <div id="dhikrDashboardGrid"></div>
+        </div>
+
+        <div id="alertOverlay" class="overlay-window">
+            <p id="alertTitle" class="text-[5vh] font-bold mb-4 opacity-50">الآن يرفع أذان</p>
+            <p id="alertPrayerName" class="text-[14vh] font-black" style="color: var(--accent-gold)">--</p>
+        </div>
+    </div>
+
+    <script>
+        // دالة التحديث والمنطق البرمجي (تم الإبقاء عليها كما هي لضمان عمل النظام)
+        const S_URL = "https://script.google.com/macros/s/AKfycbyrI707RYDyD2nv2TR9MVx41BVh8EIXwTVCwP86Xq66rHbYuAzSxfa0z_MIWzgR0e0fmw/exec?city=Madinah&year=2026";
+        const DATA_K = "P_MASTER_V30";
+        const OFF_K = "P_OFFSETS_V30";
+        const arNames = { Fajr: "الفجر", Sunrise: "الشروق", Dhuhr: "الظهر", Asr: "العصر", Maghrib: "المغرب", Isha: "العشاء" };
+        const defaultIqama = { Fajr: 25, Sunrise: 20, Dhuhr: 15, Asr: 15, Maghrib: 10, Isha: 20 };
+        const keys = ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"];
+
+        let prayerData = JSON.parse(localStorage.getItem(DATA_K));
+        let userOffsets = JSON.parse(localStorage.getItem(OFF_K)) || { adhan: { Fajr:0, Sunrise:0, Dhuhr:0, Asr:0, Maghrib:0, Isha:0 }, iqama: { Fajr:0, Sunrise:0, Dhuhr:0, Asr:0, Maghrib:0, Isha:0 }, black: { Fajr:0, Dhuhr:0, Asr:0, Maghrib:0, Isha:0 } };
+
+        async function init() {
+            renderAdjusters();
+            try {
+                const response = await fetch(S_URL);
+                const newData = await response.json();
+                if(newData && newData["1"]) { localStorage.setItem(DATA_K, JSON.stringify(newData)); prayerData = newData; }
+            } catch (e) {}
+            if (prayerData) { setInterval(update, 1000); update(); }
+        }
+
+        function toggleSettings() { 
+            const s = document.getElementById('settingsOverlay');
+            s.style.display = (s.style.display === 'flex') ? 'none' : 'flex';
+        }
+        
+        function rotate(deg) { 
+            const c = document.getElementById('appContainer');
+            if (deg !== 0) {
+                c.style.width = '100vh'; c.style.height = '100vw';
+                c.style.position = 'absolute'; c.style.top = '50%'; c.style.left = '50%';
+                c.style.transform = `translate(-50%, -50%) rotate(${deg}deg)`;
+            } else {
+                c.style.width = '100vw'; c.style.height = '100vh';
+                c.style.position = 'relative'; c.style.top = '0'; c.style.left = '0';
+                c.style.transform = `none`;
+            }
+        }
+
+        function adjust(type, key, val) {
+            userOffsets[type][key] += val;
+            if (userOffsets[type][key] < 0 && type === 'black') userOffsets[type][key] = 0;
+            localStorage.setItem(OFF_K, JSON.stringify(userOffsets));
+            renderAdjusters(); update();
+        }
+
+        function renderAdjusters() {
+            let adH = '', iqH = '', blH = '';
+            keys.forEach(k => {
+                const row = (t, v) => `<div class="flex justify-between items-center py-1 border-b"><span class="text-xs font-bold">${arNames[k]}</span><div class="flex items-center gap-1"><button onclick="adjust('${t}','${k}',-1)" class="w-6 h-6 bg-gray-200 rounded">-</button><span class="w-4 text-center text-xs font-bold">${v}</span><button onclick="adjust('${t}','${k}',1)" class="w-6 h-6 bg-gray-200 rounded">+</button></div></div>`;
+                adH += row('adhan', userOffsets.adhan[k]);
+                iqH += row('iqama', defaultIqama[k] + userOffsets.iqama[k]);
+                if(k !== 'Sunrise') blH += row('black', userOffsets.black[k]);
+            });
+            document.getElementById('adhanAdjList').innerHTML = adH; document.getElementById('iqamaAdjList').innerHTML = iqH; document.getElementById('blackScreenAdjList').innerHTML = blH;
+        }
+
+        function format12h(timeStr, offset = 0) {
+            let [h, m] = timeStr.split(' ')[0].split(':').map(Number);
+            let d = new Date(); d.setHours(h, m + offset, 0);
+            let nh = d.getHours() % 12 || 12;
+            let period = d.getHours() >= 12 ? 'م' : 'ص';
+            return `<span>${String(nh).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}</span> <span class="period-mark font-black">${period}</span>`;
+        }
+
+        function update() {
+            const now = new Date();
+            const currentMonth = now.getMonth() + 1;
+            const currentDayIdx = now.getDate() - 1;
+            if (!prayerData || !prayerData[currentMonth]) return;
+            const today = prayerData[currentMonth][currentDayIdx];
+
+            document.getElementById('mainClock').innerText = `${String(now.getHours() % 12 || 12).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+            document.getElementById('secondsClock').innerText = String(now.getSeconds()).padStart(2,'0');
+            document.getElementById('ampm').innerText = now.getHours() >= 12 ? "مساءً" : "صباحاً";
+            document.getElementById('dayName').innerText = now.toLocaleDateString('ar-SA', { weekday: 'long' });
+            document.getElementById('hijriDate').innerText = `${today.date.hijri.day} ${today.date.hijri.month.ar} ${today.date.hijri.year}`;
+            document.getElementById('gregorianDate').innerText = now.toLocaleDateString('ar-SA', { day: 'numeric', month: 'long', year: 'numeric' });
+
+            let nextP = null;
+            for (let k of keys) {
+                const [h, m] = today.timings[k].split(' ')[0].split(':').map(Number);
+                const adhanT = new Date(now); adhanT.setHours(h, m + userOffsets.adhan[k], 0, 0);
+                const iqamaT = new Date(now); iqamaT.setHours(h, m + userOffsets.adhan[k] + defaultIqama[k] + userOffsets.iqama[k], 0, 0);
+
+                if (now >= adhanT && now < new Date(adhanT.getTime() + 30000) && !window.aAct) {
+                    window.aAct = true; document.getElementById('alertOverlay').classList.add('active');
+                    document.getElementById('alertPrayerName').innerText = arNames[k];
+                    setTimeout(() => { document.getElementById('alertOverlay').classList.remove('active'); window.aAct = false; }, 30000);
+                }
+                if (k !== 'Sunrise' && now >= iqamaT && now < new Date(iqamaT.getTime() + 10000) && !window.iAct) {
+                    window.iAct = true; document.getElementById('alertOverlay').classList.add('active');
+                    document.getElementById('alertTitle').innerText = "الآن تقام صلاة";
+                    document.getElementById('alertPrayerName').innerText = arNames[k];
+                    setTimeout(() => {
+                        document.getElementById('alertOverlay').classList.remove('active');
+                        const bDur = userOffsets.black[k] || 0;
+                        if(bDur > 0) {
+                            document.getElementById('blackOverlay').classList.add('active');
+                            setTimeout(() => { 
+                                document.getElementById('blackOverlay').classList.remove('active'); 
+                                showPostDhikr(k); 
+                                window.iAct = false; 
+                            }, bDur * 60000);
+                        } else { window.iAct = false; }
+                    }, 10000);
+                }
+                if (!nextP && (now < adhanT || (k !== "Sunrise" && now < iqamaT))) {
+                    nextP = now < adhanT ? { n: arNames[k], t: adhanT, type: "أذان", key: k } : { n: arNames[k], t: iqamaT, type: "إقامة", key: k };
+                }
+            }
+
+            if (!nextP) {
+                let tomorrow = new Date(now); tomorrow.setDate(now.getDate() + 1);
+                let tMonth = tomorrow.getMonth() + 1;
+                let tDayIdx = tomorrow.getDate() - 1;
+                let tData = prayerData[tMonth] ? prayerData[tMonth][tDayIdx] : null;
+                if(!tData && prayerData[tMonth+1]) tData = prayerData[tMonth+1][0];
+                if (tData) {
+                    const [fh, fm] = tData.timings.Fajr.split(' ')[0].split(':').map(Number);
+                    const fajrT = new Date(tomorrow); fajrT.setHours(fh, fm + userOffsets.adhan.Fajr, 0, 0);
+                    nextP = { n: "الفجر", t: fajrT, type: "أذان", key: "Fajr" };
+                }
+            }
+
+            let listHtml = '';
+            for (let k of keys) {
+                const isNext = nextP && k === nextP.key;
+                listHtml += `<div class="prayer-row ${isNext ? 'next-active' : ''}">
+                    <div class="col-name">${arNames[k]}</div>
+                    <div class="col-adhan">${format12h(today.timings[k], userOffsets.adhan[k])}</div>
+                    <div class="col-iqama">${k === "Sunrise" ? "--:--" : format12h(today.timings[k], userOffsets.adhan[k] + defaultIqama[k] + userOffsets.iqama[k])}</div>
+                </div>`;
+            }
+            document.getElementById('prayerList').innerHTML = listHtml;
+            
+            if (nextP) {
+                const diff = nextP.t - now;
+                const hh = Math.floor(diff/3600000), mm = Math.floor((diff%3600000)/60000), ss = Math.floor((diff%60000)/1000);
+                document.getElementById('nextPrayerCountdown').innerHTML = `باقي على ${nextP.type} ${nextP.n} <span class="num-font ml-2 font-bold">${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}</span>`;
+            }
+        }
+
+        function showPostDhikr(prayerKey) {
+            const overlay = document.getElementById('afterPrayerOverlay');
+            const grid = document.getElementById('dhikrDashboardGrid');
+            const isDawnSunset = (prayerKey === 'Fajr' || prayerKey === 'Maghrib');
+            const repeatText = isDawnSunset ? "3 مرات" : "مرة واحدة";
+
+            const allDhikrs = [
+                { t: "أَسْـتَغْفِرُ الله", r: "3 مرات", w: false },
+                { t: "اللّهُـمَّ أَنْـتَ السَّلامُ ، وَمِـنْكَ السَّلام ، تَبارَكْتَ يا ذا الجَـلالِ وَالإِكْـرام.", r: "مرة واحدة", w: false },
+                { t: "لا إلهَ إلاّ اللّهُ وحدَهُ لا شريكَ لهُ، لهُ المُـلْكُ ولهُ الحَمْد، وهوَ على كلّ شَيءٍ قَدير، اللّهُـمَّ لا مانِعَ لِما أَعْطَـيْت، وَلا مُعْطِـيَ لِما مَنَـعْت.", r: "مرة واحدة", w: false },
+                { t: "سُـبْحانَ اللهِ", r: "33 مرة", w: false },
+                { t: "الحَمْـدُ لله", r: "33 مرة", w: false },
+                { t: "اللهُ أكْـبَر", r: "33 مرة", w: false },
+                { t: "لا إلهَ إلاّ اللّهُ وحدَهُ لا شريكَ لهُ، لهُ المُـلْكُ ولهُ الحَمْد، وهوَ على كلّ شَيءٍ قَدير.", r: "مرة واحدة", w: false },
+                { t: "اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ.", r: "مرة واحدة", w: false },
+                { t: "اللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ.", r: "مرة واحدة", w: true },
+                { t: "قُلْ هُوَ ٱللَّهُ أَحَدٌ، ٱللَّهُ ٱلصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ.", r: repeatText, w: false },
+                { t: "قُلْ أَعُوذُ بِرَبِّ ٱلْفَلَقِ، مِن شَرِّ مَا خَلَقَ، وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ، وَمِن شَرِّ ٱلنَّفاَّٰثَاٰتِ فِى ٱلْعُقَدِ، وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ.", r: repeatText, w: false },
+                { t: "قُلْ أَعُوذُ بِرَبِّ ٱلنَّاسِ، مَلِكِ ٱلنَّاسِ، إِلَٰهِ ٱلنَّاسِ، مِن شَرِّ ٱلْوسْوَاسِ ٱلْخَنَّاسِ، ٱلَّذِى يُوَسْوِسُ فِى صُدُورِ ٱلنَّاسِ، مِنَ ٱلْجِنَّةِ وَٱلنَّاسِ.", r: repeatText, w: false }
+            ];
+
+            if(isDawnSunset) {
+                allDhikrs.splice(7, 0, { t: "لا إلهَ إلاّ اللّهُ وحْـدَهُ لا شريكَ لهُ، لهُ المُلكُ ولهُ الحَمْد، يُحيـي وَيُمـيتُ وهُوَ على كُلّ شيءٍ قدير.", r: "10 مرات", w: false });
+            }
+
+            grid.innerHTML = '';
+            allDhikrs.forEach(d => {
+                const card = document.createElement('div');
+                card.className = `card-dhikr ${d.w ? 'card-wide' : ''}`;
+                card.innerHTML = `<p class="dhikr-content">${d.t}</p><p class="dhikr-repeat">${d.r}</p>`;
+                grid.appendChild(card);
+            });
+
+            overlay.style.display = 'flex';
+            setTimeout(() => { document.querySelectorAll('.card-dhikr').forEach((c, i) => { setTimeout(() => c.classList.add('show'), i * 60); }); }, 50);
+            setTimeout(() => { overlay.style.display = 'none'; }, 60000); // إظهار لمدة 60 ثانية لتناسب القراءة في الجوال
+        }
+
+        init();
+        const dhikrList = ["سبحان الله وبحمده", "لا إله إلا الله", "اللهم صل على محمد", "استغفر الله واتوب إليه", "سبحان الله العظيم", "لا حول ولا قوة إلا بالله", "حسبي الله ونعم الوكيل", "فَاذْكُرُونِي أَذْكُرْكُمْ", "إِنَّ اللَّهَ مَعَ الصَّابِرِينَ", "ادْعُونِي أَسْتَجِبْ لَكُمْ"];
+        setInterval(() => {
+            const txt = document.getElementById('dhikrText');
+            txt.classList.add('dhikr-fade');
+            setTimeout(() => {
+                txt.innerText = dhikrList[Math.floor(Math.random() * dhikrList.length)];
+                txt.classList.remove('dhikr-fade');
+            }, 600);
+        }, 5000);
+    </script>
+</body>
+</html>
