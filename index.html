@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>مواقيت الصلاة  | نسخة رمضان</title>
+    <title>مواقيت الصلاة | Ramadan V</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -29,37 +29,60 @@
             color: var(--text-cream);
         }
         
-        #appContainer { width: 100vw; height: 100vh; display: flex; flex-direction: column; padding: 2vh 4vw 0 4vw; position: relative; transition: all 0.4s ease; }
+        #appContainer { width: 100vw; height: 100vh; display: flex; flex-direction: column; padding: 1.5vh 3vw; position: relative; transition: all 0.4s ease; }
         
-        .header { margin-bottom: 8px; flex-shrink: 0; text-align: center; }
-        #fullDate { font-size: 2.5vh !important; font-weight: 900; color: var(--accent-beige); opacity: 0.8; }
-        #dayName { font-weight: 900; font-size: 5.5vh !important; line-height: 1; margin: 0.8vh 0; color: #fff; text-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .header { margin-bottom: 0.5vh; flex-shrink: 0; text-align: center; }
+        #fullDate { font-size: clamp(1.5vh, 2.2vh, 2.5vh) !important; font-weight: 900; color: var(--accent-beige); opacity: 0.8; }
+        #dayName { font-weight: 900; font-size: clamp(4vh, 5.5vh, 6.5vh) !important; line-height: 1; margin: 0.5vh 0; color: #fff; text-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         
-        #mainClock { font-family: 'Montserrat', sans-serif; font-size: 15vh; font-weight: 900; line-height: 0.8; letter-spacing: -0.5vh; color: var(--accent-beige); text-shadow: 0 0 40px rgba(209, 188, 155, 0.3); }
-        #secondsClock { font-family: 'Montserrat', sans-serif; font-size: 5.5vh; font-weight: 700; color: #fff; }
-        #ampm { font-size: 3vh; font-weight: 900; color: var(--accent-beige); }
+        #mainClock { font-family: 'Montserrat', sans-serif; font-size: clamp(10vh, 14vh, 16vh); font-weight: 900; line-height: 0.8; letter-spacing: -0.5vh; color: var(--accent-beige); text-shadow: 0 0 40px rgba(209, 188, 155, 0.3); }
+        #secondsClock { font-family: 'Montserrat', sans-serif; font-size: clamp(4vh, 5.5vh, 6vh); font-weight: 700; color: #fff; }
+        #ampm { font-size: clamp(2vh, 3vh, 3.5vh); font-weight: 900; color: var(--accent-beige); }
 
-        .countdown-wrapper { background: var(--accent-beige); color: var(--dark-brown); padding: 1vh 4vw; border-radius: 12px; margin-top: 5px; display: inline-block; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
-        #nextPrayerCountdown { font-size: 3.5vh; font-weight: 900; }
+        .countdown-wrapper { background: var(--accent-beige); color: var(--dark-brown); padding: 0.8vh 4vw; border-radius: 12px; margin-top: 0.5vh; display: inline-block; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+        #nextPrayerCountdown { font-size: clamp(2vh, 3.2vh, 3.8vh); font-weight: 900; }
 
-        .dhikr-box { min-height: 9vh; height: auto; padding: 1vh 2vw; background: rgba(209, 188, 155, 0.08); backdrop-filter: blur(4px); border-radius: 25px; display: flex; align-items: center; justify-content: center; width: 100%; margin: 0 auto 1.5vh auto; border: 1px solid rgba(209, 188, 155, 0.2); position: relative; overflow: hidden; flex-shrink: 0; }
-        #dhikrText { color: var(--text-cream); font-weight: 800; text-align: center; transition: all 0.4s ease; line-height: 1.2; width: 100%; }
+        /* تعديل فيلد الأذكار: حجم ثابت ونموذج نص مرن */
+        .dhikr-box { 
+            height: 10vh; /* طول ثابت */
+            min-height: 80px;
+            padding: 0.5vh 2vw; 
+            background: rgba(209, 188, 155, 0.08); 
+            backdrop-filter: blur(4px); 
+            border-radius: 20px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            width: 100%; 
+            margin: 1.5vh auto; 
+            border: 1px solid rgba(209, 188, 155, 0.2); 
+            position: relative; 
+            overflow: hidden; 
+            flex-shrink: 0; 
+        }
+        #dhikrText { color: var(--text-cream); font-weight: 800; text-align: center; transition: all 0.4s ease; line-height: 1.2; width: 100%; word-wrap: break-word; }
         .dhikr-fade { opacity: 0; transform: translateY(5px); }
 
-        .content-area { position: relative; flex-grow: 1; overflow: hidden; margin-bottom: 3vh; border-radius: 40px; display: flex; justify-content: center; align-items: center; }
-        .prayer-list-container { background: var(--glass-table); backdrop-filter: blur(20px); border-radius: 40px; height: 100%; width: 100%; display: flex; flex-direction: column; justify-content: flex-start; padding: 0.8vh; border: 1px solid rgba(209, 188, 155, 0.15); transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .content-area { position: relative; flex-grow: 1; overflow: hidden; margin-bottom: 2vh; border-radius: 30px; display: flex; justify-content: center; align-items: center; }
+        .prayer-list-container { background: var(--glass-table); backdrop-filter: blur(20px); border-radius: 30px; height: 100%; width: 100%; display: flex; flex-direction: column; justify-content: flex-start; padding: 0.5vh; border: 1px solid rgba(209, 188, 155, 0.15); transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
         
-        #promoImage { 
-            position: absolute; width: 100%; height: 100%; object-fit: cover; border-radius: 40px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(209, 188, 155, 0.2); 
-            transform: translateY(105%); transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); z-index: 10; 
-        }
+				#promoImage { 
+			position: absolute; 
+			width: 100%;      /* تقليل العرض */
+			height: 100%;     /* تقليل الارتفاع */
+			object-fit: contain; 
+			border-radius: 40px; 
+			box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(209, 188, 155, 0.2); 
+			transform: translateY(105%); 
+			transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); 
+			z-index: 10; 
+		}
 
-        .prayer-row { display: flex; justify-content: space-between; align-items: center; padding: 0 4vw; height: 16.6%; border-bottom: 1px solid rgba(209, 188, 155, 0.05); font-size: 4.8vh; font-weight: 900 !important; color: var(--text-cream); }
-        .next-active { background: linear-gradient(90deg, rgba(209, 188, 155, 0.25), transparent, rgba(209, 188, 155, 0.25)) !important; border-radius: 25px; border: 2px solid var(--accent-beige) !important; color: #fff !important; }
+        .prayer-row { display: flex; justify-content: space-between; align-items: center; padding: 0 3vw; height: 16.6%; border-bottom: 1px solid rgba(209, 188, 155, 0.05); font-size: clamp(3vh, 4.5vh, 5.2vh); font-weight: 900 !important; color: var(--text-cream); }
+        .next-active { background: linear-gradient(90deg, rgba(209, 188, 155, 0.25), transparent, rgba(209, 188, 155, 0.25)) !important; border-radius: 20px; border: 2px solid var(--accent-beige) !important; color: #fff !important; }
 
-        #settingsOverlay { background: #000; z-index: 7000; padding: 3vh 3vw; display: none; flex-direction: column; justify-content: space-between; position: absolute; inset: 0; color: white; overflow-y: auto; }
-        .adj-card { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 20px; border: 1px solid var(--accent-beige); margin-bottom: 8px; }
+        #settingsOverlay { background: #000; z-index: 7000; padding: 2vh 3vw; display: none; flex-direction: column; justify-content: flex-start; position: absolute; inset: 0; color: white; overflow-y: auto; }
+        .adj-card { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 15px; border: 1px solid var(--accent-beige); margin-bottom: 8px; }
 
         #afterPrayerOverlay { 
             position: fixed; inset: 0; z-index: 9999; 
@@ -71,7 +94,7 @@
         #dhikrImageDisplay { width: 100%; height: 100%; object-fit: fill; display: none; }
         
         #dhikrDisplayArea { width: 100%; height: 60vh; display: flex; justify-content: center; align-items: center; position: relative; z-index: 10; }
-        .card-dhikr { position: absolute; background: rgba(28, 22, 18, 0.95); border: 4px solid var(--accent-beige); border-radius: 40px; padding: 5vh 4vw; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); width: 90%; max-width: 800px; opacity: 0; transform: scale(0.9) translateY(20px); transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); pointer-events: none; }
+        .card-dhikr { position: absolute; background: rgba(28, 22, 18, 0.95); border: 4px solid var(--accent-beige); border-radius: 40px; padding: 4vh 4vw; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); width: 90%; max-width: 800px; opacity: 0; transform: scale(0.9) translateY(20px); transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); pointer-events: none; }
         .card-dhikr.active { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
         .overlay-window { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: 0.6s ease; z-index: 2000; background: var(--dark-brown); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
         .overlay-window.active { opacity: 1; visibility: visible; }
@@ -84,13 +107,16 @@
         <i class="fas fa-sliders-h absolute top-6 right-6 opacity-30 text-3xl cursor-pointer z-50" onclick="toggleSettings()" style="color: var(--accent-beige)"></i>
 
         <div class="header">
-            <p id="fullDate"><span id="hijriDate">--</span> <span class="mx-3 opacity-40">|</span> <span id="gregorianDate">--</span></p>
+            <p id="fullDate"><span id="hijriDate">--</span> <span class="mx-2 opacity-40">|</span> <span id="gregorianDate">جاري التحميل ...</span></p>
             <h1 id="dayName">--</h1>
             <div class="flex items-baseline justify-center">
                 <span id="mainClock">00:00</span>
-                <div class="flex items-center ml-3"><span id="secondsClock">00</span><span id="ampm">--</span></div>
+                <div class="flex items-center ml-2">
+                    <span id="secondsClock">00</span>
+                    <span id="ampm" class="mr-1">--</span>
+                </div>
             </div>
-            <div class="countdown-wrapper"><div id="nextPrayerCountdown">--</div></div>
+            <div class="countdown-wrapper"><div id="nextPrayerCountdown">النظام مجاني (للاستخدام)</div></div>
         </div>
 
         <div class="dhikr-box"><div id="dhikrText">أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ</div></div>
@@ -102,28 +128,28 @@
 
         <div id="settingsOverlay">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-[3.5vh] font-black text-[#d1bc9b]">الإعدادات</h2>
+                <h2 class="text-2xl font-black text-[#d1bc9b]">الإعدادات</h2>
                 <div class="flex gap-2">
-                    <button onclick="rotate(0)" class="bg-white px-4 py-1 rounded-lg text-sm font-bold text-black">طبيعي</button>
-                    <button onclick="rotate(90)" class="bg-white px-4 py-1 rounded-lg text-sm font-bold text-black">يمين</button>
-                    <button onclick="rotate(-90)" class="bg-white px-4 py-1 rounded-lg text-sm font-bold text-black">يسار</button>
+                    <button onclick="rotate(0)" class="bg-white px-3 py-1 rounded text-xs font-bold text-black">طبيعي</button>
+                    <button onclick="rotate(90)" class="bg-white px-3 py-1 rounded text-xs font-bold text-black">يمين</button>
+                    <button onclick="rotate(-90)" class="bg-white px-3 py-1 rounded text-xs font-bold text-black">يسار</button>
                 </div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div class="adj-card">
-                    <p class="font-black border-b border-white/10 mb-2 text-[#d1bc9b]">الأذكار بعد الصلاة</p>
-                    <select id="dhikrModeSelect" class="w-full bg-white/10 p-2 rounded text-white" onchange="saveDhikrMode()">
+                    <p class="font-black border-b border-white/10 mb-2 text-[#d1bc9b] text-sm">طريقة ظهور الأذكار بعد الصلاة</p>
+                    <select id="dhikrModeSelect" class="w-full bg-white/10 p-2 rounded text-white text-sm" onchange="saveDhikrMode()">
                         <option value="cards">بطاقات الأذكار المتتالية</option>
                         <option value="image">صورة ثابتة (5 دقائق)</option>
                     </select>
                 </div>
-                <div class="adj-card"><p class="font-black border-b border-white/10 mb-2 text-[#d1bc9b]">الشاشة السوداء (د)</p><div id="blackScreenAdjList"></div></div>
+                <div class="adj-card"><p class="font-black border-b border-white/10 mb-2 text-[#d1bc9b] text-sm">الشاشة السوداء</p><div id="blackScreenAdjList"></div></div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                <div class="adj-card"><p class="font-black border-b border-white/10 mb-2 text-[#d1bc9b]">تعديل الأذان</p><div id="adhanAdjList"></div></div>
-                <div class="adj-card"><p class="font-black border-b border-white/10 mb-2 text-[#d1bc9b]">تعديل الإقامة</p><div id="iqamaAdjList"></div></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+                <div class="adj-card"><p class="font-black border-b border-white/10 mb-2 text-[#d1bc9b] text-sm">تعديل الأذان</p><div id="adhanAdjList"></div></div>
+                <div class="adj-card"><p class="font-black border-b border-white/10 mb-2 text-[#d1bc9b] text-sm">تعديل الإقامة</p><div id="iqamaAdjList"></div></div>
             </div>
-            <button onclick="toggleSettings()" class="w-full bg-[#d1bc9b] text-black py-3 rounded-xl font-black text-2xl mt-4">حفظ</button>
+            <button onclick="toggleSettings()" class="w-full bg-[#d1bc9b] text-black py-3 rounded-xl font-black text-xl mt-4">حفظ</button>
         </div>
 
         <div id="afterPrayerOverlay">
@@ -133,11 +159,12 @@
 
         <div id="alertOverlay" class="overlay-window">
             <p id="alertTitle" class="text-[4vh] font-bold mb-4 opacity-50">الآن يرفع أذان</p>
-            <p id="alertPrayerName" class="text-[12vh] font-black" style="color: var(--accent-beige)">--</p>
+            <p id="alertPrayerName" class="text-[10vh] font-black" style="color: var(--accent-beige)">--</p>
         </div>
     </div>
 
     <script>
+        // ملاحظة 1: إعدادات الربط مع قاعدة البيانات ومفاتيح التخزين المحلي
         const S_URL = "https://script.google.com/macros/s/AKfycbyrI707RYDyD2nv2TR9MVx41BVh8EIXwTVCwP86Xq66rHbYuAzSxfa0z_MIWzgR0e0fmw/exec?city=Madinah&year=2026";
         const DATA_K = "P_MASTER_V30";
         const OFF_K = "P_OFFSETS_V30";
@@ -153,7 +180,7 @@
         ];
 
         let prayerData = JSON.parse(localStorage.getItem(DATA_K));
-        let userOffsets = JSON.parse(localStorage.getItem(OFF_K)) || { adhan: { Fajr:0, Sunrise:0, Dhuhr:0, Asr:0, Maghrib:0, Isha:0 }, iqama: { Fajr:0, Sunrise:0, Dhuhr:0, Asr:0, Maghrib:0, Isha:0 }, black: { Fajr:0, Dhuhr:0, Asr:0, Maghrib:0, Isha:0 } };
+        let userOffsets = JSON.parse(localStorage.getItem(OFF_K)) || { adhan: { Fajr:0, Sunrise:0, Dhuhr:0, Asr:0, Maghrib:0, Isha:0 }, iqama: { Fajr:0, Sunrise:0, Dhuhr:0, Asr:0, Maghrib:0, Isha:0 }, black: { Fajr:15, Dhuhr:7, Asr:7, Maghrib:7, Isha:10 } };
         
         async function init() {
             renderAdjusters();
@@ -190,13 +217,14 @@
             return `<span>${String(nh).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}</span> <span class="text-[0.6em] font-black">${period}</span>`;
         }
 
+        // ملاحظة 2: ميكانيكية تحديث الساعة والعد التنازلي وإطلاق التنبيهات
         function update() {
             const now = new Date(); if (!prayerData) return;
             const today = prayerData[now.getMonth() + 1][now.getDate() - 1];
             const isFriday = now.getDay() === 5;
             document.getElementById('mainClock').innerText = `${String(now.getHours() % 12 || 12).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
             document.getElementById('secondsClock').innerText = String(now.getSeconds()).padStart(2,'0');
-            document.getElementById('ampm').innerText = now.getHours() >= 12 ? "مساءً" : "صباحاً";
+            document.getElementById('ampm').innerText = now.getHours() >= 12 ? "م" : "ص";
             document.getElementById('dayName').innerText = now.toLocaleDateString('ar-SA', { weekday: 'long' });
             document.getElementById('hijriDate').innerText = `${today.date.hijri.day} ${today.date.hijri.month.ar} ${today.date.hijri.year}`;
             document.getElementById('gregorianDate').innerText = now.toLocaleDateString('ar-SA', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -228,7 +256,7 @@
             document.getElementById('prayerList').innerHTML = listHtml;
             if (nextP) {
                 const diff = nextP.t - now; const hh = Math.floor(diff/3600000), mm = Math.floor((diff%3600000)/60000), ss = Math.floor((diff%60000)/1000);
-                document.getElementById('nextPrayerCountdown').innerHTML = `المتبقي ${nextP.type} ${nextP.n} <span class="ml-2 font-bold">${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}</span>`;
+                document.getElementById('nextPrayerCountdown').innerHTML = `المتبقي ${nextP.type} ${nextP.n} <span class="ml-2 font-bold text-[1.1em]">${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}</span>`;
                 handlePromoAnimation(nextP.type === "لوقت");
             }
 
@@ -244,14 +272,15 @@
             }
         }
 
+        // ملاحظة 3: وظيفة التحكم في التبادل بين جدول الصلاة والصورة الترويجية (الدورة الزمنية)
         function handlePromoAnimation(isAdhanCountdown) {
             const now = Date.now();
             const table = document.getElementById('prayerList');
             const promo = document.getElementById('promoImage');
             if (!isAdhanCountdown) { table.style.transform = 'translateY(0)'; promo.style.transform = 'translateY(105%)'; return; }
-            const cycleTime = 8 * 60 * 1000; 
+            const cycleTime = 3 * 60 * 1000; // مدة تكرار عملية ظهور التقويم مكان جدول الصلوات (ستظهر كل 3 الديفولت)
             const progress = now % cycleTime;
-            if (progress < 3 * 60 * 1000) { table.style.transform = 'translateY(-110%)'; promo.style.transform = 'translateY(0)'; } 
+            if (progress < 1 * 60 * 1000) { table.style.transform = 'translateY(-110%)'; promo.style.transform = 'translateY(0)'; } // مدة بقاء التقويم
             else { table.style.transform = 'translateY(0)'; promo.style.transform = 'translateY(105%)'; }
         }
 
@@ -277,12 +306,14 @@
         }
 
         function setDhikrText(text) {
-            const txt = document.getElementById('dhikrText'); txt.innerText = text;
+            const txt = document.getElementById('dhikrText'); 
+            txt.innerText = text;
             const len = text.length;
-            if(len > 60) txt.style.fontSize = "3vh";
-            else if(len > 45) txt.style.fontSize = "4vh";
-            else if(len > 30) txt.style.fontSize = "5vh";
-            else txt.style.fontSize = "5.5vh";
+            // تصغير النص ديناميكياً ليناسب الفيلد الثابت
+            if(len > 80) txt.style.fontSize = "2.5vh";
+            else if(len > 60) txt.style.fontSize = "2.2vh";
+            else if(len > 40) txt.style.fontSize = "3.2vh";
+            else txt.style.fontSize = "4.2vh";
         }
 
         setInterval(() => { 
