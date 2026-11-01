@@ -8,14 +8,216 @@
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "display_override": ["fullscreen", "standalone"],
+  "display_override": [
+    "fullscreen",
+    "standalone"
+  ],
   "orientation": "any",
   "background_color": "#120e0b",
   "theme_color": "#120e0b",
-  "categories": ["lifestyle", "utilities"],
+  "categories": [
+    "lifestyle",
+    "utilities"
+  ],
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "مواقيت اليوم",
+      "short_name": "المواقيت",
+      "description": "جدول صلوات اليوم بملء الشاشة",
+      "url": "widget.html?card=table&size=full",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "الصلاة القادمة",
+      "short_name": "القادمة",
+      "description": "الصلاة القادمة والوقت المتبقي",
+      "url": "widget.html?card=next&size=full",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "ذكر",
+      "short_name": "ذكر",
+      "description": "أذكار متجددة",
+      "url": "widget.html?card=dhikr&size=full",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "ودجات المواقيت",
+      "short_name": "الودجات",
+      "description": "اختر شكل الودجت وحجمه ولونه",
+      "url": "widget.html",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "name": "الصلاة القادمة",
+      "short_name": "الصلاة القادمة",
+      "description": "اسم الصلاة القادمة ووقتها والتاريخ الهجري",
+      "tag": "prayer-next",
+      "template": "prayer-next-template",
+      "ms_ac_template": "widgets/next-template.json",
+      "data": "widgets/data-placeholder.json",
+      "type": "application/json",
+      "screenshots": [
+        {
+          "src": "widgets/shots/next.png",
+          "sizes": "360x360",
+          "label": "الصلاة القادمة"
+        }
+      ],
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ],
+      "auth": false,
+      "update": 3600
+    },
+    {
+      "name": "جدول اليوم",
+      "short_name": "جدول اليوم",
+      "description": "أوقات صلوات اليوم مع إبراز القادمة",
+      "tag": "prayer-table",
+      "template": "prayer-table-template",
+      "ms_ac_template": "widgets/table-template.json",
+      "data": "widgets/data-placeholder.json",
+      "type": "application/json",
+      "screenshots": [
+        {
+          "src": "widgets/shots/table.png",
+          "sizes": "640x360",
+          "label": "جدول اليوم"
+        }
+      ],
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ],
+      "auth": false,
+      "update": 3600
+    },
+    {
+      "name": "التاريخ الهجري",
+      "short_name": "التاريخ الهجري",
+      "description": "اليوم والتاريخ الهجري والميلادي",
+      "tag": "prayer-date",
+      "template": "prayer-date-template",
+      "ms_ac_template": "widgets/date-template.json",
+      "data": "widgets/data-placeholder.json",
+      "type": "application/json",
+      "screenshots": [
+        {
+          "src": "widgets/shots/date.png",
+          "sizes": "360x360",
+          "label": "التاريخ الهجري"
+        }
+      ],
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ],
+      "auth": false,
+      "update": 3600
+    },
+    {
+      "name": "ذكر",
+      "short_name": "ذكر",
+      "description": "ذكر متجدد من الأذكار",
+      "tag": "prayer-dhikr",
+      "template": "prayer-dhikr-template",
+      "ms_ac_template": "widgets/dhikr-template.json",
+      "data": "widgets/data-placeholder.json",
+      "type": "application/json",
+      "screenshots": [
+        {
+          "src": "widgets/shots/dhikr.png",
+          "sizes": "640x360",
+          "label": "ذكر"
+        }
+      ],
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ],
+      "auth": false,
+      "update": 3600
+    },
+    {
+      "name": "لوحة كاملة",
+      "short_name": "لوحة كاملة",
+      "description": "التاريخ والصلاة القادمة وجدول اليوم وذكر",
+      "tag": "prayer-full",
+      "template": "prayer-full-template",
+      "ms_ac_template": "widgets/full-template.json",
+      "data": "widgets/data-placeholder.json",
+      "type": "application/json",
+      "screenshots": [
+        {
+          "src": "widgets/shots/full.png",
+          "sizes": "640x640",
+          "label": "لوحة كاملة"
+        }
+      ],
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ],
+      "auth": false,
+      "update": 3600
+    }
   ]
 }

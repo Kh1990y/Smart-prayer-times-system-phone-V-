@@ -33,7 +33,7 @@
             }
         } catch (e) {}
     </script>
-    <title>مواقيت الصلاة | v.29.2</title>
+    <title>مواقيت الصلاة | v.30</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Montserrat:wght@700;900&display=swap');
 
@@ -843,7 +843,7 @@
         #azkarOverlay .az-rem { flex: none; font-weight: 800; font-size: min(calc(var(--cw) * 3.4), calc(var(--ch) * 2.4)); color: var(--text-cream); direction: ltr; opacity: 0.85; }
         html.font-panorama #azkarOverlay .az-text { line-height: 2.05; }
 
-        #dhikrPreviewHint {
+        #dhikrPreviewHint, #cuPeekHint {
             display: none; position: absolute; bottom: 1.2%; left: 50%; transform: translateX(-50%);
             padding: 0.35em 1.1em; border-radius: 2em; font-size: max(13px, min(calc(var(--cw) * 2), calc(var(--ch) * 2)));
             background: rgba(var(--bg-rgb),0.88); color: var(--text-cream); border: 1px solid var(--accent-beige); z-index: 20; white-space: nowrap; font-weight: 800;
@@ -934,7 +934,47 @@
         .cu-msg { color: var(--accent-beige); opacity: 1; font-weight: 800; }
         .cu-eff { color: var(--accent-beige); opacity: 1; font-weight: 700; flex: 1; margin: 0; }
         #cuPane .adj-row .adj-val { min-width: 3.4em; }
-        #cuPane.on { align-items: start; }
+        #cuPane.on { align-items: start; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22em), 1fr)); }
+        .adj-card { scroll-margin-top: 4.6em; }
+        @media (max-height: 560px) { .cu-nav { position: static; } }
+        .cu-nav { grid-column: 1 / -1; position: sticky; top: -0.3em; z-index: 5; display: flex; gap: 0.45em; align-items: center; background: var(--panel); padding: 0.4em 0 0.5em; border-bottom: 1px solid rgba(var(--text-rgb),0.15); }
+        .cu-navtabs { display: flex; gap: 0.4em; overflow-x: auto; flex: 1; min-width: 0; padding: 0.15em 0.15em 0.3em; -webkit-overflow-scrolling: touch; }
+        .sbtn.cu-nb { flex: none; min-height: max(44px, 2.3em); padding: 0.2em 0.9em; font-size: 0.9em; white-space: nowrap; }
+        .sbtn.cu-peek { flex: none; min-height: max(44px, 2.3em); padding: 0.2em 0.9em; font-size: 0.9em; white-space: nowrap; background: var(--accent-beige); color: var(--on-accent); border-color: var(--accent-beige); }
+        .cu-row { border-bottom: 1px solid rgba(var(--text-rgb),0.1); padding: 0.3em 0; }
+        .adj-card > .cu-row:last-child { border-bottom: 0; }
+        .cu-grid > .cu-row { border: 1px solid rgba(var(--text-rgb),0.14); border-radius: 0.8em; padding: 0.25em; background: rgba(var(--text-rgb),0.03); }
+        .sbtn.cu-head { width: 100%; justify-content: space-between; gap: 0.6em; text-align: right; background: transparent; border-color: transparent; min-height: max(48px, 3em); padding: 0.3em 0.5em; }
+        .sbtn.cu-head::after { content: "\25BE"; flex: none; opacity: 0.7; transition: transform .2s var(--ease); }
+        .sbtn.cu-head[aria-expanded="true"] { background: rgba(var(--text-rgb),0.08); }
+        .sbtn.cu-head[aria-expanded="true"]::after { transform: rotate(180deg); }
+        .cu-ht { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+        .cu-ht b { font-weight: 900; }
+        .cu-ht small { font-weight: 600; opacity: 0.75; font-size: 0.78em; line-height: 1.55; margin-top: 0.1em; }
+        .cu-hv { display: flex; align-items: center; gap: 0.4em; flex: none; direction: ltr; font-size: 0.82em; font-weight: 800; max-width: 45%; }
+        .cu-hexv, .cu-fname { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .cu-dot { display: inline-block; width: 1.5em; height: 1.5em; border-radius: 50%; border: 2px solid rgba(var(--text-rgb),0.55); flex: none; }
+        .cu-dot.lg { width: 2.2em; height: 2.2em; }
+        .cu-panel { padding: 0.4em 0.5em 0.7em; display: flex; flex-direction: column; gap: 0.5em; }
+        .cu-panel[hidden] { display: none; }
+        .cu-cap { font-size: 0.8em; font-weight: 700; opacity: 0.8; margin: 0.2em 0 0; }
+        .cu-sample { border: 1px solid rgba(var(--text-rgb),0.25); border-radius: 0.6em; padding: 0.5em 0.8em; text-align: center; font-weight: 900; font-size: 1.15em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .cu-sample.cu-sz { background: var(--dark-brown); color: var(--accent-beige); margin: 0.2em 0 0.4em; min-height: 2em; }
+        .sbtn.cu-custom { background-image: linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f); color: #000; text-shadow: 0 0 4px #fff, 0 0 2px #fff; font-weight: 900; }
+        .sbtn.cu-custom[aria-pressed="true"] { border-color: var(--strong); box-shadow: 0 0 0 3px var(--accent-beige); }
+        .sbtn.cu-def[aria-pressed="true"] { background: var(--accent-beige); color: var(--on-accent); border-color: var(--accent-beige); }
+        .cu-ed { display: flex; flex-direction: column; gap: 0.5em; padding: 0.6em; border-radius: 0.8em; background: rgba(var(--text-rgb),0.06); border: 1px solid rgba(var(--text-rgb),0.15); }
+        .cu-ed[hidden] { display: none; }
+        .cu-rl { display: flex; flex-direction: column; gap: 0.2em; font-weight: 800; font-size: 0.85em; }
+        input.cu-rng { -webkit-appearance: none; appearance: none; width: 100%; height: max(30px, 1.9em); border-radius: 1em; border: 2px solid rgba(var(--text-rgb),0.4); margin: 0; padding: 0; background: #888; cursor: pointer; touch-action: pan-y; }
+        input.cu-rng:first-of-type, .cu-rl:first-child input.cu-rng { background: linear-gradient(to right,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00); }
+        input.cu-rng::-webkit-slider-thumb { -webkit-appearance: none; width: max(26px, 1.7em); height: max(30px, 1.9em); border-radius: 50%; background: #fff; border: 4px solid #000; box-shadow: 0 0 0 2px #fff; }
+        input.cu-rng::-moz-range-thumb { width: max(20px, 1.4em); height: max(24px, 1.6em); border-radius: 50%; background: #fff; border: 4px solid #000; box-shadow: 0 0 0 2px #fff; }
+        input.cu-rng:focus { outline: max(3px, 0.2em) solid var(--strong); outline-offset: max(2px, 0.12em); box-shadow: 0 0 0 max(6px, 0.42em) rgba(var(--accent-rgb), 0.6); }
+        .cu-big { display: flex; align-items: center; justify-content: center; gap: 0.6em; font-weight: 900; font-size: 1.05em; }
+        .cu-bigtxt { direction: ltr; font-size: 1.25em; letter-spacing: 0.05em; }
+        .cu-fonts { grid-template-columns: repeat(auto-fit, minmax(9em, 1fr)); }
+        .sbtn.cu-fb small { display: block; font-weight: 700; opacity: 0.9; font-size: 0.85em; margin-top: 0.2em; }
     </style>
 </head>
 <body>
@@ -1057,6 +1097,11 @@
                     <p class="ttl">إبقاء الشاشة مضاءة</p>
                     <div id="wakeChoice" class="choice" role="radiogroup"></div>
                     <p class="set-note" id="wakeNote">يمنع انطفاء شاشة الجهاز أثناء عرض التطبيق (يستهلك بطارية أكثر؛ الأنسب للجهاز الموصول بالشاحن).</p>
+                </div>
+                <div class="adj-card wide">
+                    <p class="ttl">ودجات المواقيت</p>
+                    <div class="choice"><button type="button" class="sbtn" onclick="location.href='widget.html'">فتح منشئ الودجات</button></div>
+                    <p class="set-note">اختر نوع الودجت (الصلاة القادمة، جدول اليوم، الساعة، التاريخ الهجري، ذكر، لوحة كاملة) وحجمه ولونه ثم أضفه إلى شاشتك الرئيسية.</p>
                 </div>
             </section>
 
@@ -1224,6 +1269,7 @@
                 </div>
             </div>
         </div>
+        <div id="cuPeekHint">معاينة — المس الشاشة أو اضغط أي مفتاح للعودة إلى الإعدادات</div>
         <div id="dhikrPreviewHint">معاينة — المس الشاشة أو اضغط أي مفتاح للرجوع</div>
     </div>
 
@@ -1463,6 +1509,7 @@
         if (ok) lsSet(META_K, JSON.stringify(meta));
         prayerData = data;
         dataMeta = meta;
+        if (typeof widgetSync === 'function') setTimeout(widgetSync, 300);
         return ok;
     }
 
@@ -1796,6 +1843,7 @@
         document.addEventListener('keydown', function(e) {
             if (e.ctrlKey || e.metaKey || e.altKey) return;
             var k = e.key, c = e.keyCode;
+            if (CU_PEEK) { e.preventDefault(); cuPeek(false); return; }   // معاينة التخصيص: أي مفتاح يعيد الإعدادات
             if (AZ.on) { e.preventDefault(); if (AZ.preview || BACK[k] || BACKC[c]) azClose(); return; }   // نافذة الأذكار: Esc/رجوع تغلقها (والمعاينة بأي مفتاح)
             if (dhikrPreview) { e.preventDefault(); closeDhikr(); return; }   // أي مفتاح يُنهي المعاينة
             if (TX.preview) { e.preventDefault(); endTextPreview(); return; }
@@ -1813,7 +1861,7 @@
             if (inField) {   // أثناء الكتابة: المفاتيح للحقل نفسه. Esc يخرج من الحقل، والأسهم ↑↓ تنقل في الحقول المفردة
                 if (k === 'Escape' || k === 'Esc' || c === 27) { e.preventDefault(); moveFocus('up'); return; }
                 var d0 = ARROW[k] || ARROWC[c];
-                if (k !== 'Tab' && !((d0 === 'up' || d0 === 'down') && tn === 'INPUT' && tg.type === 'text')) return;
+                if (k !== 'Tab' && !((d0 === 'up' || d0 === 'down') && tn === 'INPUT' && (tg.type === 'text' || tg.type === 'range'))) return;
             }
             if (BACK[k] || BACKC[c]) { e.preventDefault(); toggleSettings(false); return; }
             var dir = ARROW[k] || ARROWC[c];
@@ -1830,6 +1878,7 @@
         $('afterPrayerOverlay').addEventListener('click', function() { if (dhikrPreview) closeDhikr(); });
         $('textSlide').addEventListener('click', function() { if (TX.preview) endTextPreview(); });
         $('azkarOverlay').addEventListener('click', function() { if (AZ.on && AZ.preview) azClose(); });
+        document.addEventListener('pointerdown', function(e) { if (CU_PEEK) { e.preventDefault(); e.stopPropagation(); cuPeek(false); } }, true);
         ['pointerdown', 'wheel', 'touchstart'].forEach(function(ev) {
             document.addEventListener(ev, function() { if (isSettingsOpen()) armIdle(); }, true);
         });
@@ -3068,7 +3117,7 @@
 
     // ---------- أدوار الألوان ----------
     function cuThemeBgs() { var c = cuCurColors(); return { bg: c.bg, ac: c.ac }; }
-    function cuRoleOK(item, hex) { var t = cuThemeBgs(); return cuCon(hex, item.on === 'ac' ? t.ac : t.bg) >= 4.5; }
+    function cuRoleOK(item, hex) { return true; }   // v.30: لا قيود على الألوان — اللون لمن يختاره
     function cuPref(sel, suffix) { return sel.split(',').map(function(s) { return 'html body ' + s.trim() + (suffix || ''); }).join(','); }
 
     // ---------- يبني ورقة الأنماط (الألوان + الخطوط) من القيم المحفوظة ----------
@@ -3176,222 +3225,309 @@
     function cuSay(el, txt) { if (el) { el.textContent = txt || ''; el.style.display = txt ? 'block' : 'none'; } }
     function cuNorm(v) { return cuHex(v); }
 
-    // أداة اختيار لون: ألوان جاهزة + حقل كتابة #RRGGBB + زر «الافتراضي»
-    function cuPicker(o) {
-        // o: {label, desc, pal, get(), set(hex|null), ok(hex)->bool, why, defLabel}
-        var wrap = mk('div', 'cu-sec'), lbl = mk('div', 'cu-lbl', o.label);
-        if (o.desc) lbl.appendChild(mk('small', '', o.desc));
-        var row = mk('div', 'cu-sw-row'), sws = [], defBtn = null;
-        if (o.defLabel) {
-            defBtn = mk('button', 'sbtn cu-def', o.defLabel); defBtn.type = 'button';
-            defBtn.onclick = function() { cuSay(msg, ''); o.set(null); };
-            row.appendChild(defBtn);
-        }
-        o.pal.forEach(function(p) {
-            var b = mk('button', 'sbtn cu-sw'); b.type = 'button';
-            b.style.background = p[0]; b.title = p[1]; b.setAttribute('aria-label', o.label + ': ' + p[1]);
-            b.dataset.hex = p[0];
-            b.onclick = function() { pick(p[0]); };
-            row.appendChild(b); sws.push(b);
-        });
-        var hx = mk('input', 'tx-in cu-hex'); hx.type = 'text'; hx.maxLength = 7; hx.placeholder = '#RRGGBB'; hx.setAttribute('aria-label', o.label + ' (كود اللون)');
-        hx.setAttribute('autocomplete', 'off'); hx.setAttribute('spellcheck', 'false'); hx.dir = 'ltr';
-        hx.addEventListener('change', function() {
-            var h = cuNorm(hx.value);
-            if (!h) { cuSay(msg, 'اكتب اللون بصيغة مثل #d1bc9b'); hx.value = o.get() || ''; return; }
-            pick(h);
-        });
-        row.appendChild(hx);
-        var msg = mk('p', 'set-note cu-msg'); msg.style.display = 'none'; msg.setAttribute('role', 'status');
-        function pick(h) {
-            if (!o.ok(h)) { cuSay(msg, o.why || 'هذا اللون لا يظهر بوضوح، اختر لوناً أفتح أو أغمق.'); hx.value = o.get() || ''; return; }
-            cuSay(msg, ''); o.set(h);
-        }
-        wrap.appendChild(lbl); wrap.appendChild(row); wrap.appendChild(msg);
-        var u = { say: function(t) { cuSay(msg, t); }, refresh: function() {
-            var cur = o.get();
-            sws.forEach(function(b) {
-                var ok = o.ok(b.dataset.hex);
-                b.disabled = !ok;
-                b.setAttribute('aria-pressed', cur === b.dataset.hex ? 'true' : 'false');
-            });
-            if (defBtn) defBtn.setAttribute('aria-pressed', cur ? 'false' : 'true');
-            if (document.activeElement !== hx) hx.value = cur || '';
-        } };
-        CU_UI.push(u);
-        wrap._u = u;
-        return wrap;
+    // ---------- أدوات واجهة التخصيص (v.30): صفوف قابلة للطي + منتقي ألوان كامل + معاينة ----------
+    var CU_ACC = [];
+    var CU_PEEK = false, CU_PEEKT = 0;
+    function cuAccCloseAll(except) { CU_ACC.forEach(function(a) { if (a !== except) { a.panel.hidden = true; a.head.setAttribute('aria-expanded', 'false'); } }); }
+    // صف قابل للطي: العنوان + وصفه + القيمة الحالية على الجانب، وتحته لوحة الاختيار (واحدة مفتوحة فقط حتى لا تطول الصفحة)
+    function cuAcc(title, desc) {
+        var row = mk('div', 'cu-row'), head = mk('button', 'sbtn cu-head'), tx = mk('span', 'cu-ht'), val = mk('span', 'cu-hv'), panel = mk('div', 'cu-panel');
+        head.type = 'button'; head.setAttribute('aria-expanded', 'false');
+        tx.appendChild(mk('b', '', title)); if (desc) tx.appendChild(mk('small', '', desc));
+        head.appendChild(tx); head.appendChild(val); panel.hidden = true;
+        var a = { row: row, head: head, val: val, panel: panel };
+        head.onclick = function() {
+            var open = panel.hidden;
+            cuAccCloseAll(a); panel.hidden = !open; head.setAttribute('aria-expanded', open ? 'true' : 'false');
+            if (open) { cuRefresh(); setTimeout(function() { try { panel.scrollIntoView({ block: 'nearest' }); } catch (e) {} }, 30); }
+        };
+        row.appendChild(head); row.appendChild(panel); CU_ACC.push(a);
+        return a;
     }
 
+    // تحويل بين HEX و HSL (لشرائط الاختيار)
+    function cuToHsl(h) {
+        var c = cuRGB(h), r = c[0] / 255, g = c[1] / 255, b = c[2] / 255, mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn, l = (mx + mn) / 2, s = 0, hh = 0;
+        if (d) {
+            s = d / (1 - Math.abs(2 * l - 1));
+            if (mx === r) hh = ((g - b) / d) % 6; else if (mx === g) hh = (b - r) / d + 2; else hh = (r - g) / d + 4;
+            hh *= 60; if (hh < 0) hh += 360;
+        }
+        return [Math.round(hh) % 360, Math.round(s * 100), Math.round(l * 100)];
+    }
+    function cuFromHsl(h, s, l) {
+        s /= 100; l /= 100;
+        var c = (1 - Math.abs(2 * l - 1)) * s, x = c * (1 - Math.abs((h / 60) % 2 - 1)), m = l - c / 2, k = Math.floor(h / 60) % 6;
+        var p = [[c, x, 0], [x, c, 0], [0, c, x], [0, x, c], [x, 0, c], [c, 0, x]][k];
+        return cuToHex([(p[0] + m) * 255, (p[1] + m) * 255, (p[2] + m) * 255]);
+    }
+    // لون عنصر/تعبير CSS كما يظهر فعلاً (لتمثيل «الافتراضي» بنقطة ملوّنة صحيحة)
+    function cuCssHex(expr, sel) {
+        try {
+            var el, tmp = null;
+            if (sel) el = document.querySelector(sel);
+            if (!el) { tmp = document.createElement('i'); tmp.style.color = expr; $('appContainer').appendChild(tmp); el = tmp; }
+            var m = getComputedStyle(el).color.match(/\d+(\.\d+)?/g);
+            if (tmp) tmp.parentNode.removeChild(tmp);
+            if (m && m.length >= 3) return cuToHex([+m[0], +m[1], +m[2]]);
+        } catch (e) {}
+        return '#d1bc9b';
+    }
+
+    // منتقي لون كامل: ألوان جاهزة + «لون مخصص» (كل ألوان الدنيا) + كتابة الرمز + «الافتراضي». لا قيود على التباين: اللون لك.
+    // o: {label, desc, pal, get(), set(hex|null, live), defLabel, defHex(), sampleBg, sample}
+    function cuPicker(o) {
+        var a = cuAcc(o.label, o.desc), dot = mk('i', 'cu-dot'), hv = mk('span', 'cu-hexv');
+        a.val.appendChild(dot); a.val.appendChild(hv);
+        var P = a.panel;
+        var sample = mk('div', 'cu-sample', o.sample || 'الفجر 05:01 • نص تجريبي'); sample.style.background = o.sampleBg || 'var(--dark-brown)';
+        P.appendChild(mk('p', 'cu-cap', 'معاينة اللون على خلفية هذا القسم:')); P.appendChild(sample);
+        P.appendChild(mk('p', 'cu-cap', 'اختر لوناً جاهزاً، أو «مخصص» لاختيار أي لون تريده:'));
+        var row = mk('div', 'cu-sw-row'), sws = [];
+        if (o.defLabel) {
+            var db = mk('button', 'sbtn cu-def', o.defLabel); db.type = 'button';
+            db.onclick = function() { o.set(null, false); }; row.appendChild(db); a.def = db;
+        }
+        o.pal.forEach(function(p) {
+            var b = mk('button', 'sbtn cu-sw'); b.type = 'button'; b.style.background = p[0]; b.title = p[1];
+            b.setAttribute('aria-label', o.label + ': ' + p[1]); b.dataset.hex = p[0];
+            b.onclick = function() { o.set(p[0], false); }; row.appendChild(b); sws.push(b);
+        });
+        var cb = mk('button', 'sbtn cu-def cu-custom', 'مخصص ◐'); cb.type = 'button'; cb.setAttribute('aria-label', o.label + ': لون مخصص');
+        row.appendChild(cb); P.appendChild(row);
+
+        var ed = mk('div', 'cu-ed'); ed.hidden = true;
+        function slider(lbl, max) {
+            var w = mk('label', 'cu-rl'), t = mk('span', '', lbl), r = mk('input', 'cu-rng');
+            r.type = 'range'; r.min = 0; r.max = max; r.step = 1; r.dir = 'ltr'; r.setAttribute('aria-label', o.label + ' — ' + lbl);
+            w.appendChild(t); w.appendChild(r); ed.appendChild(w); return r;
+        }
+        var rH = slider('درجة اللون', 359), rS = slider('قوة اللون', 100), rL = slider('الفاتح ↔ الغامق', 100);
+        var big = mk('div', 'cu-big'), bigDot = mk('i', 'cu-dot lg'), bigTxt = mk('span', 'cu-bigtxt');
+        big.appendChild(mk('span', '', 'رمز اللون:')); big.appendChild(bigTxt); big.appendChild(bigDot);
+        var hx = mk('input', 'tx-in cu-hex'); hx.type = 'text'; hx.maxLength = 7; hx.placeholder = '#RRGGBB'; hx.dir = 'ltr';
+        hx.setAttribute('aria-label', o.label + ' (اكتب رمز اللون)'); hx.setAttribute('autocomplete', 'off'); hx.setAttribute('spellcheck', 'false');
+        ed.appendChild(big); ed.appendChild(mk('p', 'cu-cap', 'أو اكتب الرمز مباشرة (مثل #d1bc9b):')); ed.appendChild(hx);
+        P.appendChild(ed);
+        var msg = mk('p', 'set-note cu-msg'); msg.style.display = 'none'; msg.setAttribute('role', 'status'); P.appendChild(msg);
+
+        function grads(h, s, l) {
+            rS.style.background = 'linear-gradient(to right,' + cuFromHsl(h, 0, l) + ',' + cuFromHsl(h, 100, l) + ')';
+            rL.style.background = 'linear-gradient(to right,#000,' + cuFromHsl(h, s, 50) + ',#fff)';
+        }
+        function fromSliders(final) {
+            var h = +rH.value, s = +rS.value, l = +rL.value, hex = cuFromHsl(h, s, l);
+            grads(h, s, l); o.set(hex, !final);
+        }
+        [rH, rS, rL].forEach(function(r) {
+            r.addEventListener('input', function() { fromSliders(false); });
+            r.addEventListener('change', function() { fromSliders(true); });
+        });
+        hx.addEventListener('change', function() {
+            var h = cuHex(hx.value);
+            if (!h) { cuSay(msg, 'اكتب الرمز بصيغة مثل #d1bc9b'); return; }
+            cuSay(msg, ''); o.set(h, false);
+        });
+        cb.onclick = function() {
+            ed.hidden = !ed.hidden; cb.setAttribute('aria-pressed', ed.hidden ? 'false' : 'true');
+            if (!ed.hidden) { if (!o.get()) o.set(o.defHex(), false); u.refresh(); }
+        };
+        var u = { refresh: function() {
+            var cur = o.get(), shown = cur || o.defHex();
+            dot.style.background = shown; hv.textContent = cur ? cur : (o.defLabel || '') ;
+            if (o.isBg) { sample.style.background = shown; sample.style.color = cuLum(shown) < 0.4 ? '#fff' : '#000'; } else sample.style.color = shown;
+            bigDot.style.background = shown; bigTxt.textContent = shown;
+            var inPal = false;
+            sws.forEach(function(b) { var on = cur === b.dataset.hex; if (on) inPal = true; b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+            if (a.def) a.def.setAttribute('aria-pressed', cur ? 'false' : 'true');
+            cb.setAttribute('aria-pressed', (cur && !inPal) || !ed.hidden ? 'true' : 'false');
+            if (!ed.hidden) {
+                var q = cuToHsl(shown);
+                if (document.activeElement !== rH) rH.value = q[0];
+                if (document.activeElement !== rS) rS.value = q[1];
+                if (document.activeElement !== rL) rL.value = q[2];
+                grads(+rH.value, +rS.value, +rL.value);
+                if (document.activeElement !== hx) hx.value = shown;
+            }
+        } };
+        CU_UI.push(u);
+        return a.row;
+    }
+
+    // منتقي خط: صف قابل للطي، وكل خيار معروض بالخط نفسه
+    // o: {label, desc, get(), set(id), sample, defLabel}
+    function cuFontPick(o) {
+        var a = cuAcc(o.label, o.desc), nm = mk('span', 'cu-fname');
+        a.val.appendChild(nm);
+        var box = mk('div', 'choice cu-fonts'); box.setAttribute('role', 'radiogroup'); box.setAttribute('aria-label', o.label);
+        var items = [{ id: '', ar: o.defLabel || 'حسب الخط العام', css: '' }].concat(FONTS), btns = [];
+        items.forEach(function(f) {
+            var b = mk('button', 'sbtn cu-fb'); b.type = 'button'; b.setAttribute('role', 'radio'); b.dataset.v = f.id; b.style.flexDirection = 'column';
+            b.appendChild(mk('span', '', f.ar));
+            if (f.id) { var s = mk('small', '', o.sample); s.style.fontFamily = f.css + ",'Cairo',sans-serif"; s.style.direction = 'rtl'; b.appendChild(s); }
+            b.onclick = function() { o.set(f.id); }; box.appendChild(b); btns.push(b);
+        });
+        a.panel.appendChild(mk('p', 'cu-cap', 'كل خيار مكتوب بخطه ليُعرف شكله قبل الاختيار:')); a.panel.appendChild(box);
+        CU_UI.push({ refresh: function() {
+            var cur = o.get() || '', f = null; FONTS.forEach(function(x) { if (x.id === cur) f = x; });
+            nm.textContent = f ? f.ar : (o.defLabel || 'حسب الخط العام');
+            nm.style.fontFamily = f ? f.css + ",'Cairo',sans-serif" : '';
+            btns.forEach(function(b) { b.setAttribute('aria-checked', cur === b.dataset.v ? 'true' : 'false'); });
+        } });
+        return a.row;
+    }
+
+    // صف حجم: وصف + معاينة حية + أزرار − و +
     function cuAdjRow(label, desc, key) {
         var row = mk('div', 'cu-sec'), lbl = mk('div', 'cu-lbl', label); lbl.appendChild(mk('small', '', desc));
         var line = mk('div', 'adj-row'), ctl = mk('div', 'adj-ctl'), val = mk('span', 'adj-val'), eff = mk('span', 'set-note cu-eff');
-        line.style.borderBottom = '0';
-        function step(d) {
-            var r = CU_RANGE[key], v = CU[key] + d * r[2];
-            CU[key] = Math.max(r[0], Math.min(r[1], v));
-            cuCommit();
-        }
+        var sm = mk('div', 'cu-sample cu-sz', 'الفجر 05:01 ص'); line.style.borderBottom = '0';
+        function step(d) { var r = CU_RANGE[key]; CU[key] = Math.max(r[0], Math.min(r[1], CU[key] + d * r[2])); cuCommit(); }
         var minus = mk('button', 'sbtn adj-btn', '−'), plus = mk('button', 'sbtn adj-btn', '+');
         minus.type = plus.type = 'button';
         minus.setAttribute('aria-label', 'تصغير: ' + label); plus.setAttribute('aria-label', 'تكبير: ' + label);
         minus.onclick = function() { step(-1); }; plus.onclick = function() { step(1); };
-        ctl.appendChild(minus); ctl.appendChild(val); ctl.appendChild(plus);
+        var rst = mk('button', 'sbtn cu-def', '100٪'); rst.type = 'button'; rst.setAttribute('aria-label', 'الحجم الأصلي: ' + label);
+        rst.onclick = function() { CU[key] = 100; cuCommit(); };
+        ctl.appendChild(minus); ctl.appendChild(val); ctl.appendChild(plus); ctl.appendChild(rst);
         line.appendChild(eff); line.appendChild(ctl);
-        row.appendChild(lbl); row.appendChild(line);
-        row._u = { refresh: function() {
+        row.appendChild(lbl); row.appendChild(sm); row.appendChild(line);
+        var u = { refresh: function() {
             val.textContent = CU[key] + '٪';
-            minus.disabled = CU[key] <= CU_RANGE[key][0];
-            plus.disabled = CU[key] >= CU_RANGE[key][1];
-            var e = '';
+            var rg = CU_RANGE[key]; minus.disabled = CU[key] <= rg[0]; plus.disabled = CU[key] >= rg[1];
+            var e = '', sc = CU[key];
             if (key === 'fsm' || key === 'fsr') {
                 var cap = CU_EFF.cap, capV = cap ? (key === 'fsm' ? cap.m : cap.r) : 100, ap = Math.round((key === 'fsm' ? CU_EFF.m : CU_EFF.r) * 100);
-                if (CU[key] > 100) e = 'الحد الأقصى لشاشتك (' + (cap ? cap.cls : '') + '): ' + capV + '٪' + (ap < Math.min(CU[key], capV) ? ' — المطبّق فعلياً ' + ap + '٪ حتى لا يخرج شيء عن إطاره' : '');
+                sc = Math.min(CU[key], capV, ap || 999);
+                if (CU[key] > 100) e = 'أقصى حد لشاشتك (' + (cap ? cap.cls : '') + '): ' + capV + '٪' + (ap < Math.min(CU[key], capV) ? ' — المطبَّق الآن ' + ap + '٪ حتى لا يخرج شيء عن إطاره' : '');
             }
+            sm.style.fontSize = (1.15 * sc / 100) + 'em'; rst.style.visibility = CU[key] === 100 ? 'hidden' : 'visible';
             eff.textContent = e; eff.style.display = e ? 'block' : 'none';
         } };
-        CU_UI.push(row._u);
+        CU_UI.push(u);
         return row;
     }
 
-    function cuFontRow(r) {
-        var row = mk('div', 'cu-sec'), lbl = mk('div', 'cu-lbl', r.ar); lbl.appendChild(mk('small', '', r.d));
-        var box = mk('div', 'choice'); box.setAttribute('role', 'radiogroup'); box.setAttribute('aria-label', r.ar);
-        var items = [{ id: '', ar: 'حسب الخط العام', css: '' }].concat(FONTS);
-        var btns = [];
-        items.forEach(function(f) {
-            var b = mk('button', 'sbtn', f.ar); b.type = 'button'; b.setAttribute('role', 'radio'); b.dataset.v = f.id;
-            if (f.css) b.style.fontFamily = f.css + ", 'Cairo', sans-serif";
-            b.onclick = function() { if (f.id) CU.fnt[r.id] = f.id; else delete CU.fnt[r.id]; cuCommit(); };
-            box.appendChild(b); btns.push(b);
-        });
-        row.appendChild(lbl); row.appendChild(box);
-        CU_UI.push({ refresh: function() { btns.forEach(function(b) { b.setAttribute('aria-checked', (CU.fnt[r.id] || '') === b.dataset.v ? 'true' : 'false'); }); } });
-        return row;
-    }
-
-    function cuCard(title, wide) { var c = mk('div', 'adj-card' + (wide ? ' wide' : '')); c.appendChild(mk('p', 'ttl', title)); return c; }
+    function cuCard(title, wide, id) { var c = mk('div', 'adj-card' + (wide ? ' wide' : '')); c.appendChild(mk('p', 'ttl', title)); if (id) c.id = id; return c; }
     function cuDesc(t) { return mk('p', 'set-desc', t); }
 
     var CU_INFO = null;
     function cuUpdateInfo() {
         if (!CU_INFO) return;
         var cap = CU_EFF.cap || cuCaps();
-        CU_INFO.textContent = 'نوع الشاشة المكتشف: ' + cap.cls + ' • أقصى تكبير مسموح لها: ' + cap.m + '٪ للصفحة الرئيسية و' + cap.r + '٪ للجدول.';
+        CU_INFO.textContent = 'شاشتك: ' + cap.cls + ' • أقصى تكبير لها: ' + cap.m + '٪ للصفحة الرئيسية و' + cap.r + '٪ للجدول.';
+    }
+
+    // معاينة الشاشة الرئيسية بدون إغلاق الإعدادات: تختفي الإعدادات مؤقتاً (أي لمسة/مفتاح تعيدها، أو بعد ٣٠ ثانية)
+    function cuPeek(on) {
+        CU_PEEK = !!on; clearTimeout(CU_PEEKT);
+        var so = $('settingsOverlay'), h = $('cuPeekHint');
+        so.style.visibility = on ? 'hidden' : ''; h.style.display = on ? 'block' : 'none';
+        if (on) { CU_PEEKT = setTimeout(function() { cuPeek(false); }, 30000); clearTimeout(idleT); }
+        else { armIdle(); var b = $('cuPeekBtn'); if (b) b.focus(); }
     }
 
     function cuBuild() {
         var pane = $('cuPane'); if (!pane || pane.dataset.built) return;
         pane.dataset.built = '1';
 
+        // شريط التنقل السريع + المعاينة (يبقى ظاهراً أثناء التمرير)
+        var nav = mk('div', 'cu-nav'), tabs = mk('div', 'cu-navtabs');
+        [['cuSize', 'الحجم'], ['cuTheme', 'الثيم'], ['cuColors', 'ألوان النصوص'], ['cuFonts', 'الخطوط'], ['cuNums', 'الأرقام'], ['cuReset', 'إعادة الضبط']].forEach(function(t) {
+            var b = mk('button', 'sbtn cu-nb', t[1]); b.type = 'button';
+            b.onclick = function() { var el = $(t[0]); if (el) el.scrollIntoView({ block: 'start' }); };
+            tabs.appendChild(b);
+        });
+        var pk = mk('button', 'sbtn cu-peek', '👁 معاينة الشاشة'); pk.type = 'button'; pk.id = 'cuPeekBtn';
+        pk.setAttribute('aria-label', 'معاينة الشاشة الرئيسية بالتغييرات الحالية'); pk.onclick = function() { cuPeek(true); };
+        nav.appendChild(tabs); nav.appendChild(pk); pane.appendChild(nav);
+
         // 1) حجم الخط
-        var c1 = cuCard('1) حجم الخط', true);
-        c1.appendChild(cuDesc('كبّر أو صغّر الكتابة بخطوات صغيرة. التكبير له حد أقصى يناسب حجم شاشتك، والنظام يخفّضه تلقائياً إذا كان سيُخرج أي نص عن إطاره، فلا يمكن أن يختل التصميم.'));
+        var c1 = cuCard('١) حجم الخط', true, 'cuSize');
+        c1.appendChild(cuDesc('كبّر أو صغّر الكتابة بخطوات صغيرة (٥٪). لكل شاشة حد أقصى يناسب حجمها، وإذا كان التكبير سيُخرج أي نص عن إطاره يخفّضه النظام تلقائياً، فلا يمكن أن يختل التصميم. زر ١٠٠٪ يرجّع الحجم الأصلي.'));
         var g1 = mk('div', 'cu-grid');
-        g1.appendChild(cuAdjRow('الصفحة الرئيسية', 'التاريخ واسم اليوم والساعة والعدّاد والذكر المتحرّك.', 'fsm'));
-        g1.appendChild(cuAdjRow('جدول الصلوات', 'أسماء الصلوات وأوقات الأذان والإقامة.', 'fsr'));
-        g1.appendChild(cuAdjRow('خط شاشة الإعدادات', 'حجم الكتابة في هذه الشاشة فقط (للتحكم بالريموت من بعيد).', 'fss'));
+        g1.appendChild(cuAdjRow('الصفحة الرئيسية', 'التاريخ واسم اليوم والساعة والعدّاد والذكر المتحرّك. (المدى ٨٥–١٣٠٪)', 'fsm'));
+        g1.appendChild(cuAdjRow('جدول الصلوات', 'أسماء الصلوات وأوقات الأذان والإقامة. (المدى ٨٥–١٣٠٪)', 'fsr'));
+        g1.appendChild(cuAdjRow('شاشة الإعدادات', 'حجم الكتابة في هذه الشاشة فقط، مفيد للتحكم بالريموت من بعيد. (المدى ٩٠–١٢٥٪)', 'fss'));
         c1.appendChild(g1);
         CU_INFO = mk('p', 'set-note'); c1.appendChild(CU_INFO);
-        c1.appendChild(mk('p', 'set-note', 'أذكار ما بعد الصلاة والأحاديث وأذكار الصباح والمساء تملأ النافذة تلقائياً بأكبر حجم ممكن، لذلك لا تحتاج تكبيراً.'));
+        c1.appendChild(mk('p', 'set-note', 'الأذكار والأحاديث وأذكار الصباح والمساء تملأ نافذتها تلقائياً بأكبر حجم ممكن، فلا تحتاج تكبيراً.'));
         pane.appendChild(c1);
 
         // 2) ثيم مخصص
-        var c2 = cuCard('2) ثيم مخصص', true);
-        c2.appendChild(cuDesc('صمّم ثيمك بثلاثة ألوان: الخلفية، واللون المميّز (التاريخ والساعة والعدّاد)، ولون النص. باقي الألوان تُحسب تلقائياً، وإذا اخترت لوناً غير واضح على الخلفية يُصحَّح أو يُرفض حتى تبقى القراءة سهلة من بعيد. أي تغيير يُفعَّل مباشرة.'));
-        c2.appendChild(mk('p', 'set-note', 'ابدأ من ثيم جاهز ثم عدّل عليه:'));
+        var c2 = cuCard('٢) ثيم مخصص', true, 'cuTheme');
+        c2.appendChild(cuDesc('صمّم ثيمك بثلاثة ألوان فقط، وباقي ألوان النظام (الإطارات والظلال والقمر…) تُحسب تلقائياً منها. الاختيار حرّ تماماً: أي لون تريده، والتغيير يظهر فوراً. جرّب «👁 معاينة الشاشة» في الأعلى لترى النتيجة.'));
+        c2.appendChild(mk('p', 'set-note', 'تبدأ من ثيم جاهز ثم تعدّل عليه (يُنسخ إلى الثيم المخصص):'));
         var start = mk('div', 'choice'); start.style.marginBottom = '0.6em';
         THEMES.forEach(function(t) {
             if (t.id === 'custom') return;
             var b = mk('button', 'sbtn', t.ar); b.type = 'button';
             b.style.background = t.bg; b.style.color = t.text; b.style.borderColor = t.accent;
-            b.onclick = function() { cuSayTheme(cuCommitTheme({ bg: t.bg, ac: t.accent, tx: t.text }, '')); };
+            b.onclick = function() { cuCommitTheme({ bg: t.bg, ac: t.accent, tx: t.text }, ''); };
             start.appendChild(b);
         });
         c2.appendChild(start);
-        var themeMsg = mk('p', 'set-note cu-msg'); themeMsg.style.display = 'none'; themeMsg.setAttribute('role', 'status');
-        function cuSayTheme(t) { cuSay(themeMsg, t); }
         function curTh() { return CU.th || cuCurColors(); }
-        function setTh(key, h) {
-            var th = { bg: curTh().bg, ac: curTh().ac, tx: curTh().tx };
-            th[key] = h;
-            var fixed = key === 'bg' ? cuFixTheme(th) : [];
-            cuCommitTheme(th);
-            cuSayTheme(fixed.length ? 'تم تعديل ' + fixed.join(' و') + ' تلقائياً ليبقى واضحاً على الخلفية الجديدة.' : '');
+        function setTh(key, h, live) {
+            var c = curTh(), th = { bg: c.bg, ac: c.ac, tx: c.tx }; th[key] = h;
+            if (live) { CU.th = th; cuSyncChip(); applyTheme('custom'); }
+            else cuCommitTheme(th, '');
         }
         var g2 = mk('div', 'cu-grid');
-        g2.appendChild(cuPicker({ label: 'لون الخلفية', desc: 'خلفية الشاشة كلها (الغامق يناسب الشاشات الليلية، والفاتح للأماكن المضيئة).', pal: CU_BGPAL,
-            get: function() { return CU.th ? CU.th.bg : null; },
-            ok: function(h) { var L = cuLum(h); return L <= 0.30 || L >= 0.55; }, why: 'هذا اللون متوسط الدرجة ولا يناسب الخلفية، اختر لوناً أغمق أو أفتح.',
-            set: function(h) { if (h) setTh('bg', h); } }));
-        g2.appendChild(cuPicker({ label: 'اللون المميّز', desc: 'التاريخ والساعة وشريط العدّاد والإطارات والزخارف.', pal: CU_PAL,
-            get: function() { return CU.th ? CU.th.ac : null; },
-            ok: function(h) { return cuCon(h, curTh().bg) >= 3.5; }, why: 'هذا اللون قريب من الخلفية ولن يظهر بوضوح، اختر لوناً أوضح.',
-            set: function(h) { if (h) setTh('ac', h); } }));
-        g2.appendChild(cuPicker({ label: 'لون النص', desc: 'نص الجدول والأذكار والأحاديث.', pal: CU_PAL,
-            get: function() { return CU.th ? CU.th.tx : null; },
-            ok: function(h) { return cuCon(h, curTh().bg) >= 7; }, why: 'لون النص يجب أن يكون شديد التباين مع الخلفية ليُقرأ من بعيد.',
-            set: function(h) { if (h) setTh('tx', h); } }));
+        g2.appendChild(cuPicker({ label: 'لون الخلفية', desc: 'خلفية الشاشة كلها. الغامق يناسب الليل والقاعات، والفاتح للأماكن المضيئة.', pal: CU_BGPAL, isBg: true, sampleBg: 'var(--dark-brown)', sample: 'خلفية الشاشة',
+            get: function() { return CU.th ? CU.th.bg : null; }, defHex: function() { return curTh().bg; },
+            set: function(h, live) { if (h) setTh('bg', h, live); } }));
+        g2.appendChild(cuPicker({ label: 'اللون المميّز', desc: 'التاريخ والساعة وشريط العدّاد والإطارات والزخارف.', pal: CU_PAL, sampleBg: 'var(--dark-brown)', sample: '05:01 الفجر',
+            get: function() { return CU.th ? CU.th.ac : null; }, defHex: function() { return curTh().ac; },
+            set: function(h, live) { if (h) setTh('ac', h, live); } }));
+        g2.appendChild(cuPicker({ label: 'لون النص', desc: 'نص الجدول والأذكار والأحاديث (الكلام العادي).', pal: CU_PAL, sampleBg: 'var(--dark-brown)', sample: 'سبحان الله وبحمده',
+            get: function() { return CU.th ? CU.th.tx : null; }, defHex: function() { return curTh().tx; },
+            set: function(h, live) { if (h) setTh('tx', h, live); } }));
         c2.appendChild(g2);
-        c2.appendChild(themeMsg);
-        var off = mk('button', 'sbtn', 'إلغاء الثيم المخصص والرجوع للثيم الحالي'); off.type = 'button'; off.style.marginTop = '0.6em';
+        var off = mk('button', 'sbtn', 'إلغاء الثيم المخصص والرجوع لثيم جاهز'); off.type = 'button'; off.style.marginTop = '0.7em';
         off.onclick = function() {
             CU.th = null; cuSave(); cuSyncChip();
             if ((lsGet(THEME_K) || '') === 'custom') setTheme('default'); else cuRefresh();
-            cuSayTheme('تم إلغاء الثيم المخصص.');
             cuApplyAll();
         };
         c2.appendChild(off);
         pane.appendChild(c2);
 
         // 3) ألوان النصوص
-        var c3 = cuCard('3) لون النص لكل قسم', true);
-        c3.appendChild(cuDesc('غيّر لون النص في أي قسم على حدة. تظهر فقط الألوان الواضحة على خلفية القسم (الألوان الباهتة معطّلة). «الافتراضي» يرجّع لون الثيم.'));
+        var c3 = cuCard('٣) لون النص لكل قسم', true, 'cuColors');
+        c3.appendChild(cuDesc('غيّر لون الكتابة في أي قسم على حدة. اضغط على القسم لتفتح ألوانه: لون جاهز، أو «مخصص» لأي لون في الدنيا مع رمزه. لا توجد قيود، لكن انتبه أن لوناً قريباً من الخلفية لن يُقرأ. «الافتراضي» يرجّع لون الثيم.'));
         pane.appendChild(c3);
         CU_GROUPS.forEach(function(g) {
             var cd = cuCard(g.ar);
             g.items.forEach(function(it) {
-                cd.appendChild(cuPicker({ label: it.ar, desc: it.d, pal: CU_PAL, defLabel: 'الافتراضي',
-                    get: function() { var h = CU.col[it.id]; return (h && cuRoleOK(it, h)) ? h : null; },
-                    ok: function(h) { return cuRoleOK(it, h); },
-                    why: 'هذا اللون لا يظهر بوضوح على خلفية هذا القسم، اختر لوناً أوضح.',
-                    set: function(h) { if (h) CU.col[it.id] = h; else delete CU.col[it.id]; cuCommit(); } }));
+                cd.appendChild(cuPicker({ label: it.ar, desc: it.d, pal: CU_PAL, defLabel: 'الافتراضي', sampleBg: it.on === 'ac' ? 'var(--accent-beige)' : 'var(--dark-brown)',
+                    get: function() { return CU.col[it.id] || null; },
+                    defHex: function() { return it.kind === 'c' ? cuCssHex('', it.sel.split(',')[0]) : cuCssHex(it.kind === 't' ? 'var(--text-cream)' : 'var(--accent-beige)'); },
+                    set: function(h, live) { if (h) CU.col[it.id] = h; else delete CU.col[it.id]; if (live) { cuApplyStyle(); } else { cuSave(); cuApplyStyle(); } cuRefresh(); } }));
             });
             pane.appendChild(cd);
         });
 
         // 4) الخطوط
-        var c4 = cuCard('4) خط مختلف لكل نوع نص', true);
-        c4.appendChild(cuDesc('اختر خطاً مختلفاً لكل نوع نص في الموقع. «حسب الخط العام» يتبع الخط المختار في تبويب العرض. الأرقام تبقى ثابتة العرض فلا تهتز الساعة.'));
-        pane.appendChild(c4);
-        var cf = cuCard('الخطوط', true);
+        var c4 = cuCard('٤) خط مختلف لكل نوع نص', true, 'cuFonts');
+        c4.appendChild(cuDesc('اختر خطاً مختلفاً لكل نوع نص في الموقع. «حسب الخط العام» يتبع الخط المختار في تبويب «العرض». اضغط على النوع لترى كل الخطوط مكتوبة بشكلها.'));
         var gf = mk('div', 'cu-grid');
-        CU_FONTROLES.forEach(function(r) { gf.appendChild(cuFontRow(r)); });
-        cf.appendChild(gf);
-        pane.appendChild(cf);
+        CU_FONTROLES.forEach(function(r) {
+            gf.appendChild(cuFontPick({ label: r.ar, desc: r.d, sample: r.num ? '05:30 12:45' : 'الفجر • بسم الله', defLabel: 'حسب الخط العام',
+                get: function() { return CU.fnt[r.id] || ''; }, set: function(id) { if (id) CU.fnt[r.id] = id; else delete CU.fnt[r.id]; cuCommit(); } }));
+        });
+        c4.appendChild(gf); pane.appendChild(c4);
 
         // 5) خط الأرقام
-        var c6 = cuCard('5) خط الأرقام', true);
-        c6.appendChild(cuDesc('يغيّر خط كل الأرقام في النظام: الساعة والثواني والتاريخ وأوقات الأذان والإقامة والعدّاد، مستقلاً عن خط بقية الكلام. «حسب الخط» يتبع الخط المختار لكل نوع نص.'));
-        var nbox = mk('div', 'choice'); nbox.setAttribute('role', 'radiogroup'); nbox.setAttribute('aria-label', 'خط الأرقام');
-        var nbtns = [];
-        [{ id: '', ar: 'حسب الخط', css: '' }].concat(FONTS).forEach(function(f) {
-            var b = mk('button', 'sbtn'); b.type = 'button'; b.setAttribute('role', 'radio'); b.dataset.v = f.id;
-            b.style.flexDirection = 'column';
-            b.appendChild(mk('span', '', f.ar));
-            var sm = mk('small', '', '0123456789 05:30'); sm.style.cssText = 'display:block;font-weight:900;font-size:1.1em;margin-top:0.2em;direction:ltr';
-            if (f.css) sm.style.fontFamily = f.css + ", 'Montserrat', sans-serif";
-            if (f.id) b.appendChild(sm);
-            b.onclick = function() { CU.num = f.id; cuCommit(); };
-            nbox.appendChild(b); nbtns.push(b);
-        });
-        c6.appendChild(nbox);
-        CU_UI.push({ refresh: function() { nbtns.forEach(function(b) { b.setAttribute('aria-checked', (CU.num || '') === b.dataset.v ? 'true' : 'false'); }); } });
+        var c6 = cuCard('٥) خط الأرقام', true, 'cuNums');
+        c6.appendChild(cuDesc('خط واحد لكل أرقام النظام: الساعة والثواني والتاريخ وأوقات الأذان والإقامة والعدّاد. يغلب خط النوع المختار أعلاه، وكتابة الكلام تبقى بخطها.'));
+        c6.appendChild(cuFontPick({ label: 'خط الأرقام', desc: 'يشمل كل الأرقام داخل النظام ما عدا نصوص الأذكار والأحاديث.', sample: '0123456789 05:30', defLabel: 'حسب الخط',
+            get: function() { return CU.num || ''; }, set: function(id) { CU.num = id; cuCommit(); } }));
         pane.appendChild(c6);
 
-        // إعادة الضبط
-        var c5 = cuCard('إعادة الضبط', true);
-        c5.appendChild(cuDesc('يرجع الأحجام والألوان والخطوط والثيم المخصص كما كانت في البداية. لا يمسّ المدينة ولا التعديلات الأخرى.'));
+        // 6) إعادة الضبط
+        var c5 = cuCard('إعادة الضبط', true, 'cuReset');
+        c5.appendChild(cuDesc('يرجّع الأحجام والألوان والخطوط والثيم المخصص كما كانت في البداية. لا يمسّ المدينة ولا مواقيت الأذان ولا النصوص. اضغط مرتين للتأكيد.'));
         var rs = mk('button', 'sbtn', 'إعادة ضبط كل التخصيص'); rs.type = 'button';
         var armed = 0;
         rs.onclick = function() {
@@ -3401,7 +3537,7 @@
             try { localStorage.removeItem(CUSTOM_K); } catch (e) {}
             cuSyncChip();
             if ((lsGet(THEME_K) || '') === 'custom') setTheme('default');
-            cuApplyAll(); cuRefresh();
+            cuAccCloseAll(null); cuApplyAll(); cuRefresh();
         };
         c5.appendChild(rs);
         pane.appendChild(c5);
@@ -3511,6 +3647,19 @@
     }
     function setWake(on) { lsSet(WAKE_K, on ? '1' : '0'); markChoice('wakeChoice', on ? '1' : '0'); wakeApply(); }
     function mobBuild() { buildChoice('wakeChoice', [{ v: '1', t: 'تشغيل' }, { v: '0', t: 'إيقاف' }], function(v) { setWake(v === '1'); }); }
+
+    function widgetSync() {
+        try {
+            if (!('caches' in window) || !prayerData || !/^https?:$/.test(location.protocol)) return;
+            var city = getCity();
+            var body = JSON.stringify({ v: 1, city: city.id, cityAr: city.ar, year: dataMeta && dataMeta.year, data: prayerData, adhan: userOffsets.adhan, at: Date.now() });
+            caches.open('prayer-widget-data').then(function(c) { return c.put('widget-config.json', new Response(body, { headers: { 'Content-Type': 'application/json' } })); }).catch(function() {});
+        } catch (e) {}
+    }
+    document.addEventListener('visibilitychange', function() { if (document.visibilityState === 'hidden') widgetSync(); });
+    window.addEventListener('pagehide', widgetSync);
+    setInterval(widgetSync, 30 * 60 * 1000);
+    setTimeout(widgetSync, 8000);
 
     document.addEventListener('visibilitychange', wakeApply);       // يُعاد الطلب عند الرجوع للتطبيق
     document.addEventListener('pointerdown', function once() { document.removeEventListener('pointerdown', once); wakeApply(); });   // بعض المتصفحات تشترط لمسة أولى
