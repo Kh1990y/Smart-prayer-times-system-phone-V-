@@ -1,0 +1,89 @@
+{
+  "type": "AdaptiveCard",
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "version": "1.5",
+  "rtl": true,
+  "body": [
+    {
+      "type": "ColumnSet",
+      "columns": [
+        {
+          "type": "Column",
+          "width": "stretch",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "${city}",
+              "wrap": true,
+              "weight": "Bolder",
+              "color": "Accent"
+            }
+          ]
+        },
+        {
+          "type": "Column",
+          "width": "auto",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "${dayName} ${dateH}",
+              "wrap": true,
+              "size": "Small",
+              "isSubtle": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Container",
+      "spacing": "Small",
+      "items": [
+        {
+          "type": "ColumnSet",
+          "$data": "${rows}",
+          "style": "${if(isNext, 'emphasis', 'default')}",
+          "spacing": "None",
+          "columns": [
+            {
+              "type": "Column",
+              "width": "stretch",
+              "items": [
+                {
+                  "type": "TextBlock",
+                  "text": "${name}",
+                  "wrap": true,
+                  "weight": "${if(isNext, 'Bolder', 'Default')}",
+                  "color": "${if(isNext, 'Accent', 'Default')}",
+                  "isSubtle": "${past}"
+                }
+              ]
+            },
+            {
+              "type": "Column",
+              "width": "auto",
+              "items": [
+                {
+                  "type": "TextBlock",
+                  "text": "${time}",
+                  "wrap": true,
+                  "weight": "Bolder",
+                  "color": "${if(isNext, 'Accent', 'Default')}",
+                  "isSubtle": "${past}",
+                  "horizontalAlignment": "Left"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "type": "Action.Execute",
+      "title": "فتح التطبيق",
+      "verb": "open"
+    }
+  ]
+}

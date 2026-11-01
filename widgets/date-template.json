@@ -1,0 +1,60 @@
+{
+  "type": "AdaptiveCard",
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "version": "1.5",
+  "rtl": true,
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "${dayName}",
+      "wrap": true,
+      "size": "Medium",
+      "color": "Accent",
+      "weight": "Bolder",
+      "horizontalAlignment": "Center"
+    },
+    {
+      "type": "TextBlock",
+      "text": "${dayH}",
+      "wrap": true,
+      "size": "ExtraLarge",
+      "weight": "Bolder",
+      "horizontalAlignment": "Center",
+      "spacing": "None"
+    },
+    {
+      "type": "TextBlock",
+      "text": "${monthH}",
+      "wrap": true,
+      "size": "Large",
+      "weight": "Bolder",
+      "horizontalAlignment": "Center",
+      "spacing": "None"
+    },
+    {
+      "type": "TextBlock",
+      "text": "${yearH}",
+      "wrap": true,
+      "size": "Small",
+      "isSubtle": true,
+      "horizontalAlignment": "Center",
+      "spacing": "None"
+    },
+    {
+      "type": "TextBlock",
+      "text": "${dateG}",
+      "wrap": true,
+      "size": "Small",
+      "isSubtle": true,
+      "horizontalAlignment": "Center",
+      "spacing": "Small"
+    }
+  ],
+  "actions": [
+    {
+      "type": "Action.Execute",
+      "title": "فتح التطبيق",
+      "verb": "open"
+    }
+  ]
+}
