@@ -1,0 +1,50 @@
+{
+  "city": "المدينة المنورة",
+  "dayName": "الخميس",
+  "dateH": "8 ربيع الآخر 1448 هـ",
+  "dateG": "29 أكتوبر 2026",
+  "dayH": "8",
+  "monthH": "ربيع الآخر",
+  "yearH": "1448 هـ",
+  "nextName": "العصر",
+  "nextTime": "02:58 م",
+  "dhikr": "{فَاذْكُرُونِي أَذْكُرْكُمْ}",
+  "rows": [
+    {
+      "name": "الفجر",
+      "time": "04:55 ص",
+      "isNext": false,
+      "past": true
+    },
+    {
+      "name": "الشروق",
+      "time": "06:12 ص",
+      "isNext": false,
+      "past": true
+    },
+    {
+      "name": "الظهر",
+      "time": "11:42 ص",
+      "isNext": false,
+      "past": true
+    },
+    {
+      "name": "العصر",
+      "time": "02:58 م",
+      "isNext": true,
+      "past": false
+    },
+    {
+      "name": "المغرب",
+      "time": "05:19 م",
+      "isNext": false,
+      "past": false
+    },
+    {
+      "name": "العشاء",
+      "time": "06:49 م",
+      "isNext": false,
+      "past": false
+    }
+  ]
+}
